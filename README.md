@@ -23,7 +23,7 @@
 #### Production (Heroku)
 - Right click on `Maven Build` > `New`;
 - Set configurations below:
-  - `Name`: agenda-academica-api-local
+  - `Name`: agenda-academica-api-heroku
   - `Base Directory`: `Browse Workspace` > Select your project
   - `Goals`: **heroku:deploy-war**
 
