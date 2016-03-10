@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de Usuario</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo Usuario</button>
+</div>
+
+
+<div class="leftArea">
+<ul id="usuarioList"></ul>
+</div>
+
+<form id="usuarioForm">
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="usuarioId" name="id" type="text" disabled />
+
+<label>Nome:</label>
+<input type="text" id="nome" name="nome" required>
+
+<label>Telefone/Celular:</label>
+<input type="text" id="celular" name="celular"/>
+
+<label>E-mail:</label>
+<input type="text" id="email" name="email"/>
+
+<label>Senha:</label>
+<input type="text" id="senha" name="region"/>
+ 
+
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+</div> -->
+
+<div class="rightArea">
+<label>lista de Instituicoes:</label>
+<ul id="instituicoesList"></ul>
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/usuario.js"></script>
+
+</body>
+</html>

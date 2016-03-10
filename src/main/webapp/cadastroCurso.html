@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+<title>Cadastro de curso</title>
+
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo curso</button>
+</div>
+
+
+<div class="leftArea">
+<ul id="cursoList"></ul>
+</div>
+
+<form id="cursoForm">
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="cursoId" name="id" type="text" disabled />
+
+<label>Nome:</label>
+<input type="text" id="nome" name="nome" required>
+
+<label>Código Ano Letivo:</label>
+<input type="text" id="codigoAnoLetivo" name="codigoAnoLetivo"/>
+
+<label>Descrição:</label>
+<input type="text" id="descricao" name="descricao"/>
+
+<label>Area Do Conhecimento:</label>
+<input type="text" id="areaDoConhecimento" name="areaDoConhecimento"/>
+ 
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+
+ 
+	//aqui é so caso for professor, tem que ver como vai ficar
+	private ArrayList<TurmaModel> listaDeTurmas = new ArrayList<TurmaModel>();
+	
+	//caso for aluno ja é a lista de materias
+	private ArrayList<MateriaModel> listaDeMaterias = new ArrayList<MateriaModel>();
+</div> -->
+
+<div class="rightArea">
+
+<label>lista de Turmas:</label>
+<ul id="listaDeTurmas"></ul> 
+<!-- 
+<label>lista de Materias:</label>
+<ul id="listaDeMaterias"></ul>-->
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/curso.js"></script>
+
+</body>
+</html>
