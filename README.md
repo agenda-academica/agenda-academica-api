@@ -28,4 +28,4 @@
   - `Goals`: **heroku:deploy-war**
 
 # Enjoy!
-RESTful URL: http://127.0.0.1:8080/agenda-academica-api/rest/*
+RESTful URL: http://127.0.0.1:8080/agenda-academica-api/rest/****
