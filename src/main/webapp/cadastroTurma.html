@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de turma</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo turma</button>
+	<a href="index.html">Menu</a>
+</div>
+ 
+<div class="leftArea">
+<ul id="turmaList"></ul>
+</div>
+
+<form id="turmaForm">
+
+ 
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="turmaId" name="id" type="text" disabled />
+
+<label>Nome:</label>
+<input type="text" id="nome" name="nome" required>
+
+<label>Descrição:</label>
+<input type="text" id="descricao" name="descricao"/>
+
+<label>E-mail da Turma:</label>
+<input type="text" id="emailTurma" name="emailTurma"/>
+
+<label>Código do Curso:</label>
+<input type="text" id="codigoCurso" name="codigoCurso"/>
+ 
+
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+
+	private ArrayList<UsuarioModel> listaDeAlunos = new ArrayList<UsuarioModel>();
+	private ArrayList<UsuarioModel> listaDeRepresentantes = new ArrayList<UsuarioModel>();
+ 
+	
+	//SOMENTE CASO FOR PROFESSOR!!!!!!
+	private ArrayList<MateriaModel> listaDeMateria = new ArrayList<MateriaModel>();
+
+</div> -->
+
+<div class="rightArea">
+
+<ul id="listaDeAlunos"></ul>
+
+<ul id="listaDeRepresentantes"></ul>
+
+<label>lista de Materias:</label>
+<ul id="listaDeMateria"></ul>
+
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/turma.js"></script>
+
+</body>
+</html>

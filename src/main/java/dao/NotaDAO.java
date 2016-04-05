@@ -10,177 +10,237 @@
 	import java.util.List;
 	
 	import model.NotaModel;
-
+ 
 	/**
 	 * @author Sergio Eduardo Bertolazo
 	 */
 	public class NotaDAO {
-
-		
-		List<NotaModel> list = new ArrayList<NotaModel>();
+ 
 		
 		public NotaDAO(){
-			
-				for (int i = 1;i <= 11; i++){
-	        	
-	            NotaModel Nota = new NotaModel();
-	            Nota.setCodigo(i);
-	            //Nota.setNome("name" + i);
-	            Nota.setDescricao("celular" +i);
-	           // Nota.setEmail( "email"+ i);
-	           // Nota.setSenha( "senha"+ i);
-	             
-	                    list.add(Nota);
-	        	
-	        }
+ 
 			
 		}
 
 	    public List<NotaModel> findAll() {
 	    	
-	 
+			 
+	List<NotaModel> list = new ArrayList<NotaModel>();
+	        
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM nota ORDER BY descricao";
+	    	
+	        try {
+	        	
+	            c = ConnectionHelper.getConnection();
+	            
+	            Statement s = c.createStatement();
+	            
+	            ResultSet rs = s.executeQuery(sql);
+	            
+	            while (rs.next()) {
+	            	
+	                list.add(processRow(rs));
+	                
+	            }
+	            
+	        } catch (SQLException e) {
+	        	
+	            e.printStackTrace();
+	            
+	            throw new RuntimeException(e);
+	            
+			} finally {
+				
+				ConnectionHelper.close(c);
+				
+			}
 	        return list;
 	    }
 
 	    
-	    public List<NotaModel> findByName(String name) {
-	    	List<NotaModel> listName = new ArrayList<NotaModel>();
+	    public List<NotaModel> findByName(String descricao) {
 	    	
-	     for(NotaModel item : list ) {
-	    	 if(item.getDescricao().equals(name)){
-	    		listName.add(item);
-	    	 }
-	     }
-	     return listName;
-	    }
-	    
-	    public NotaModel findById(int id) {
-	  
-	        return list.get(id);
-	    }
-
-	    public NotaModel save(NotaModel Nota)
-		{
-			return Nota.getCodigo() > 0 ? update(Nota) : create(Nota);
-		}    
-	    
-	    public NotaModel create(NotaModel Nota) {
-	    	
-	    	//
-	    	Nota.setCodigo(list.size()+1);
-	    	list.add(Nota);
-	    	return Nota;
+	        List<NotaModel> list = new ArrayList<NotaModel>();
 	        
-	    	//
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM nota as e " +
+				"WHERE UPPER(descricao) LIKE ? " +	
+				"ORDER BY descricao";
 	    	
-	    	
-	    	
-	/*        Connection c = null;
-	        PreparedStatement ps = null;
 	        try {
 	            c = ConnectionHelper.getConnection();
-	            ps = c.prepareStatement("INSERT INTO Nota (name, grapes, country, region, year, picture, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-	                new String[] { "ID" });
-	            ps.setString(1, Nota.getName());
-	            ps.setString(2, Nota.getGrapes());
-	            ps.setString(3, Nota.getCountry());
-	            ps.setString(4, Nota.getRegion());
-	            ps.setString(5, Nota.getYear());
-	            ps.setString(6, Nota.getPicture());
-	            ps.setString(7, Nota.getDescription());
-	            ps.executeUpdate();
-	            ResultSet rs = ps.getGeneratedKeys();
-	            rs.next();
-	            // Update the id in the returned object. This is important as this value must be returned to the client.
-	            int id = rs.getInt(1);
-	            Nota.setId(id);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-			} finally {
-				ConnectionHelper.close(c);
-			}
-	        return Nota;*/
-	        
-	        
-	    }
-
-	    public NotaModel update(NotaModel Nota) {
-	    	
-	    	//
-/*	    	list.get(Nota.getId()).setName(Nota.getName());
-	    	list.get(Nota.getId()).setGrapes(Nota.getGrapes());
-
-	    	list.get(Nota.getId()).setCountry(Nota.getCountry());
-	    	
-	    	list.get(Nota.getId()).setGrapes(Nota.getRegion());
-	    	list.get(Nota.getId()).setGrapes(Nota.getYear());
-	    	list.get(Nota.getId()).setGrapes("bouscat.jpg");
-	    	list.get(Nota.getId()).setGrapes(Nota.getDescription());*/
-	 
-	    	
-	    	return Nota;
-	    	//
-	    	
-	 /*       Connection c = null;
-	        try {
-	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("UPDATE Nota SET name=?, grapes=?, country=?, region=?, year=?, picture=?, description=? WHERE id=?");
-	            ps.setString(1, Nota.getName());
-	            ps.setString(2, Nota.getGrapes());
-	            ps.setString(3, Nota.getCountry());
-	            ps.setString(4, Nota.getRegion());
-	            ps.setString(5, Nota.getYear());
-	            ps.setString(6, Nota.getPicture());
-	            ps.setString(7, Nota.getDescription());
-	            ps.setInt(8, Nota.getId());
-	            ps.executeUpdate();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setString(1, "%" + descricao.toUpperCase() + "%");
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	                list.add(processRow(rs));
+	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException(e);
 			} finally {
 				ConnectionHelper.close(c);
 			}
-	        return Nota;*/
+	        return list;
 	    }
-
-	    public boolean remove(int id) {
+	    
+	    public NotaModel findById(int id) {
+	  
+	    	String sql = "SELECT * FROM nota WHERE codigo = ?";
 	    	
-	    	list.remove(id);
-	    	return true;
+	    	NotaModel nota = null;
 	    	
-	       /* Connection c = null;
+	        Connection c = null;
+	        
 	        try {
 	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("DELETE FROM Nota WHERE id=?");
+	            PreparedStatement ps = c.prepareStatement(sql);
 	            ps.setInt(1, id);
-	            int count = ps.executeUpdate();
-	            return count == 1;
+	            ResultSet rs = ps.executeQuery();
+	            if (rs.next()) {
+	                nota = processRow(rs);
+	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            throw new RuntimeException(e);
 			} finally {
 				ConnectionHelper.close(c);
-			}*/
+			}
+	        return nota;
+	    }
+	    
+	    public List<NotaModel> findByFatherId(int id) {
+	    	
+	    	 List<NotaModel> list = new ArrayList<NotaModel>();
+	  	  
+	    	String sql = "SELECT * FROM nota WHERE codigoAula = ?";
+ 
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	list.add(processRow(rs));
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
+	    }
+
+	    public NotaModel save(NotaModel nota)
+		{
+			return nota.getCodigo() > 0 ? update(nota) : create(nota);
+		}    
+	    
+	    public NotaModel create(NotaModel nota) {
+	    	
+	    	Connection c = null;
+	        PreparedStatement ps = null;
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            ps = c.prepareStatement("INSERT INTO nota (codigoTrabalho, codigoProva, codigoAluno, descricao, nota) VALUES (?, ?, ?, ?, ?)",
+	            		
+	                new String[] { "ID" });
+ 
+	            	ps.setInt(1, nota.getCodigoTrabalho());
+	            	ps.setInt(2, nota.getCodigoProva());
+	            	ps.setInt(3, nota.getCodigoAluno());
+	            	ps.setString(4, nota.getDescricao());
+	            	ps.setInt(5, nota.getNota());
+ 
+	            	//ps.setInt(6, nota.getCodigo());
+
+	 
+	            	ps.executeUpdate();
+	            
+	            ResultSet rs = ps.getGeneratedKeys();
+	            
+	            rs.next();
+	            
+	            // Update the id in the returned object. This is important as this value must be returned to the client.
+	            int id = rs.getInt(1);
+	            
+	            nota.setCodigo(id);
+	            
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return nota;
+	        
+	    }
+
+	    public NotaModel update(NotaModel nota) {
+	    	 Connection c = null;
+	    	  
+	          try {
+	        	  
+	              c = ConnectionHelper.getConnection();
+ 
+	              PreparedStatement ps = c.prepareStatement("UPDATE nota SET codigoTrabalho=?, codigoProva=?, codigoAluno=?, descricao=?, nota=?  WHERE codigo=?");
+	  
+	            	ps.setInt(1, nota.getCodigoTrabalho());
+	            	ps.setInt(2, nota.getCodigoProva());
+	            	ps.setInt(3, nota.getCodigoAluno());
+	            	ps.setString(4, nota.getDescricao());
+	            	ps.setInt(5, nota.getNota());
+
+	            	ps.setInt(6, nota.getCodigo());
+ 
+	              
+	              ps.executeUpdate();
+	          } catch (SQLException e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
+	          return nota;	    }
+
+ 
+
+	    public boolean remove(int id) {
+	    	  Connection c = null;
+	          try {
+	              c = ConnectionHelper.getConnection();
+	              PreparedStatement ps = c.prepareStatement("DELETE FROM nota WHERE id=?");
+	              ps.setInt(1, id);
+	              int count = ps.executeUpdate();
+	              return count == 1;
+	          } catch (Exception e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
 	    }
 
 	    protected NotaModel processRow(ResultSet rs) throws SQLException {
-	    	NotaModel Nota = new NotaModel();
-	    	  /* Nota.setCodigo(i);
-	            Nota.setNome("name" + i);
-	            Nota.setCelular("celular" +i);
-	            Nota.setEmail( "email"+ i);
-	            Nota.setSenha( "senha"+ i);
-	        Nota.setId(rs.getInt("id"));
-	        Nota.setName(rs.getString("name"));
-	        Nota.setGrapes(rs.getString("grapes"));
-	        Nota.setCountry(rs.getString("country"));
-	        Nota.setRegion(rs.getString("region"));
-	        Nota.setYear(rs.getString("year"));
-	        Nota.setPicture(rs.getString("picture"));
-	        Nota.setDescription(rs.getString("description"));*/
-	        return Nota;
+	    	
+	    	NotaModel nota = new NotaModel();
+ 
+	    		nota.setCodigo(rs.getInt("codigo"));
+	    		nota.setNota(rs.getInt("nota"));
+	       		nota.setCodigoAluno(rs.getInt("codigoAluno"));
+	    		nota.setDescricao(rs.getString("descricao"));
+	    		nota.setCodigoProva(rs.getInt("codigoProva"));
+	            nota.setCodigoTrabalho(rs.getInt("codigoTrabalho"));
+	            
+	        return nota;
 	    }
 	    
 	}
+
 

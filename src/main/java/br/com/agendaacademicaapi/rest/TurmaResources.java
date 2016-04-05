@@ -13,7 +13,11 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.InstituicaoDeEnsinoDAO;
+import dao.MateriaDAO;
 import dao.TurmaDAO;
+import model.InstituicaoDeEnsinoModel;
+import model.MateriaModel;
 import model.TurmaModel;
 
 	@Path("/turma")
@@ -40,6 +44,14 @@ import model.TurmaModel;
 		public TurmaModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<MateriaModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			MateriaDAO materiaDAO = new MateriaDAO();
+			return materiaDAO.findByFatherIdTurma(query);
 		}
 
 		@POST

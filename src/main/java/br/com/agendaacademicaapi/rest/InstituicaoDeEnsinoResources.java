@@ -14,7 +14,9 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.AnoLetivoDAO;
 import dao.InstituicaoDeEnsinoDAO;
+import model.AnoLetivoModel;
 import model.InstituicaoDeEnsinoModel;
 
 
@@ -42,6 +44,14 @@ import model.InstituicaoDeEnsinoModel;
 		public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<AnoLetivoModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			AnoLetivoDAO anoDAO = new AnoLetivoDAO();
+			return anoDAO.findByFatherId(query);
 		}
 
 		@POST

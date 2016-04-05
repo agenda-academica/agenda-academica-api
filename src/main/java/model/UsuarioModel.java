@@ -13,6 +13,7 @@ public class UsuarioModel {
 	private String email;
 	private String celular;
 	private String senha;
+	private String login;
 	
 	public UsuarioModel(){
 		
@@ -77,6 +78,15 @@ public class UsuarioModel {
 	 */
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
 	
 

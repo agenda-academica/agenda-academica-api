@@ -17,6 +17,7 @@ public class TurmaModel {
 	
 	private String nome;
 	private String descricao;
+	private String emailTurma;
 	private ArrayList<UsuarioModel> listaDeAlunos = new ArrayList<UsuarioModel>();
 	private ArrayList<UsuarioModel> listaDeRepresentantes = new ArrayList<UsuarioModel>();
 
@@ -126,6 +127,14 @@ public class TurmaModel {
 	 */
 	public void setCodigoCurso(int codigoCurso) {
 		this.codigoCurso = codigoCurso;
+	}
+
+	public String getEmailTurma() {
+		return emailTurma;
+	}
+
+	public void setEmailTurma(String emailTurma) {
+		this.emailTurma = emailTurma;
 	}
 	
 }

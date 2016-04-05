@@ -13,8 +13,12 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.AnexoDAO;
 import dao.ConteudoDAO;
+import dao.InstituicaoDeEnsinoDAO;
+import model.AnexoModel;
 import model.ConteudoModel;
+import model.InstituicaoDeEnsinoModel;
 
 	@Path("/conteudo")
 	public class ConteudoResources {
@@ -40,6 +44,14 @@ import model.ConteudoModel;
 		public ConteudoModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<AnexoModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			AnexoDAO anexoDAO = new AnexoDAO();
+			return anexoDAO.findByFatherIdConteudo(query);
 		}
 
 		@POST

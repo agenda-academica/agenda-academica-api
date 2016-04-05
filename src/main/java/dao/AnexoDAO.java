@@ -1,6 +1,12 @@
 	package dao;
 
-	import java.sql.Connection;
+	import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
 	import java.sql.PreparedStatement;
 	import java.sql.ResultSet;
 	import java.sql.SQLException;
@@ -9,6 +15,7 @@
 	import java.util.List;
 	
 	import model.AnexoModel;
+import model.AnexoModel;
 
 	/**
 	 * @author Sergio Eduardo Bertolazo
@@ -16,49 +23,177 @@
 	public class AnexoDAO {
 
 		
-		List<AnexoModel> list = new ArrayList<AnexoModel>();
+		
 		
 		public AnexoDAO(){
 			
-				for (int i = 1;i <= 11; i++){
-	        	
-	            AnexoModel anexo = new AnexoModel();
-	            anexo.setCodigo(i);
-	            anexo.setNome("name" + i);
-	            anexo.setCaminhoArquivo("caminho pdf" +i);
-	            anexo.setDescricaoArquivo( "ddescricao"+ i);
-	            anexo.setTipoArquivo( "pdf"+ i);
-	            anexo.setTamanhoArquivo( "103"+ i + "kbps");
-	             
-	                    list.add(anexo);
-	        	
-	        }
+				
 			
 		}
 
 	    public List<AnexoModel> findAll() {
 	    	
-	 
+			 
+	List<AnexoModel> list = new ArrayList<AnexoModel>();
+	        
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM anexo";
+	    	
+	        try {
+	        	
+	            c = ConnectionHelper.getConnection();
+	            
+	            Statement s = c.createStatement();
+	            
+	            ResultSet rs = s.executeQuery(sql);
+	            
+	            while (rs.next()) {
+	            	
+	                list.add(processRow(rs));
+	                
+	            }
+	            
+	        } catch (SQLException e) {
+	        	
+	            e.printStackTrace();
+	            
+	            throw new RuntimeException(e);
+	            
+			} finally {
+				
+				ConnectionHelper.close(c);
+				
+			}
 	        return list;
 	    }
 
 	    
-	    public List<AnexoModel> findByName(String name) {
-	    	List<AnexoModel> listName = new ArrayList<AnexoModel>();
+	    public List<AnexoModel> findByName(String descricao) {
 	    	
-	     for(AnexoModel item : list ) {
-	    	 if(item.getNome().equals(name)){
-	    		listName.add(item);
-	    	 }
-	     }
-	     return listName;
+	        List<AnexoModel> list = new ArrayList<AnexoModel>();
+	        
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM anexo as e " +
+				"WHERE UPPER(descricao) LIKE ? ";
+	    	
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setString(1, "%" + descricao.toUpperCase() + "%");
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	                list.add(processRow(rs));
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
 	    }
 	    
 	    public AnexoModel findById(int id) {
 	  
-	        return list.get(id);
+	    	String sql = "SELECT * FROM anexo WHERE codigo = ?";
+	    	
+	    	AnexoModel anexo = null;
+	    	
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            if (rs.next()) {
+	                anexo = processRow(rs);
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return anexo;
+	    }
+	    
+	    public List<AnexoModel> findByFatherIdConteudo(int id) {
+	    	
+	    	 List<AnexoModel> list = new ArrayList<AnexoModel>();
+	  	  
+	    	String sql = "SELECT * FROM anexo WHERE codigoConteudo = ?";
+ 
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	list.add(processRow(rs));
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
 	    }
 
+	    public List<AnexoModel> findByFatherIdProva(int id) {
+	    	
+	    	 List<AnexoModel> list = new ArrayList<AnexoModel>();
+	  	  
+	    	String sql = "SELECT * FROM anexo WHERE codigoProva = ?";
+
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	list.add(processRow(rs));
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
+	    }
+	    
+	    public List<AnexoModel> findByFatherIdTrabalho(int id) {
+	    	
+	    	 List<AnexoModel> list = new ArrayList<AnexoModel>();
+	  	  
+	    	String sql = "SELECT * FROM anexo WHERE codigoTrabalho = ?";
+
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	list.add(processRow(rs));
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
+	    }
 	    public AnexoModel save(AnexoModel anexo)
 		{
 			return anexo.getCodigo() > 0 ? update(anexo) : create(anexo);
@@ -66,121 +201,126 @@
 	    
 	    public AnexoModel create(AnexoModel anexo) {
 	    	
-	    	//
-	    	anexo.setCodigo(list.size()+1);
-	    	list.add(anexo);
-	    	return anexo;
-	        
-	    	//
-	    	
-	    	
-	    	
-	/*        Connection c = null;
+	    	Connection c = null;
 	        PreparedStatement ps = null;
 	        try {
 	            c = ConnectionHelper.getConnection();
-	            ps = c.prepareStatement("INSERT INTO Anexo (name, grapes, country, region, year, picture, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
+	            ps = c.prepareStatement("INSERT INTO anexo (caminhoArquivo, codigoConteudo, codigoProva, codigoTrabalho, descricaoArquivo, nome, tamanhoArquivo, tipoArquivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 	                new String[] { "ID" });
-	            ps.setString(1, Anexo.getName());
-	            ps.setString(2, Anexo.getGrapes());
-	            ps.setString(3, Anexo.getCountry());
-	            ps.setString(4, Anexo.getRegion());
-	            ps.setString(5, Anexo.getYear());
-	            ps.setString(6, Anexo.getPicture());
-	            ps.setString(7, Anexo.getDescription());
-	            ps.executeUpdate();
+	            
+	    		    		
+	    		//vai ser usado servidor de arquivos
+	    		//anexo.setArquivo(arquivo);
+	    	 
+	            	ps.setString(1, anexo.getCaminhoArquivo());
+	            	ps.setInt(2, anexo.getCodigoConteudo());
+	            	ps.setInt(3, anexo.getCodigoProva());
+	            	ps.setInt(4, anexo.getCodigoTrabalho());
+	            	ps.setString(5, anexo.getDescricaoArquivo());
+	            	ps.setString(6, anexo.getNome());
+	            	ps.setString(7, anexo.getTamanhoArquivo());
+	            	ps.setString(8, anexo.getTipoArquivo());
+
+	            	//ps.setInt(9, anexo.getCodigo());
+
+		            //depois ver como resolver os itens abaixo!
+		            //anexo.setListaDeAnexos(listaDeAnexos);
+		            // anexo.setListaDeNotas(listaDeAnexos);
+		            //anexo.setNota(listaDeAnexos);
+	  
+	            	ps.executeUpdate();
+	            
 	            ResultSet rs = ps.getGeneratedKeys();
+	            
 	            rs.next();
+	            
 	            // Update the id in the returned object. This is important as this value must be returned to the client.
 	            int id = rs.getInt(1);
-	            Anexo.setId(id);
+	            
+	            anexo.setCodigo(id);
+	            
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            throw new RuntimeException(e);
 			} finally {
 				ConnectionHelper.close(c);
 			}
-	        return Anexo;*/
-	        
+	        return anexo;
 	        
 	    }
 
 	    public AnexoModel update(AnexoModel anexo) {
-	    	
-	    	//
-/*	    	list.get(Anexo.getId()).setName(Anexo.getName());
-	    	list.get(Anexo.getId()).setGrapes(Anexo.getGrapes());
+	    	 Connection c = null;
+	    	  
+	          try {
+	        	  
+	              c = ConnectionHelper.getConnection();
+	           
+	              PreparedStatement ps = c.prepareStatement("UPDATE anexo SET caminhoArquivo=?, codigoConteudo=?, codigoProva=?, codigoTrabalho=?, descricaoArquivo=?, nome=?, tamanhoArquivo=?, tipoArquivo=? WHERE codigo=?");
+	
+	  	    		//vai ser usado servidor de arquivos
+	  	    		//anexo.setArquivo(arquivo);
+	  	    	 
+	  	            	ps.setString(1, anexo.getCaminhoArquivo());
+	  	            	ps.setInt(2, anexo.getCodigoConteudo());
+	  	            	ps.setInt(3, anexo.getCodigoProva());
+	  	            	ps.setInt(4, anexo.getCodigoTrabalho());
+	  	            	ps.setString(5, anexo.getDescricaoArquivo());
+	  	            	ps.setString(6, anexo.getNome());
+	  	            	ps.setString(7, anexo.getTamanhoArquivo());
+	  	            	ps.setString(8, anexo.getTipoArquivo());
 
-	    	list.get(Anexo.getId()).setCountry(Anexo.getCountry());
-	    	
-	    	list.get(Anexo.getId()).setGrapes(Anexo.getRegion());
-	    	list.get(Anexo.getId()).setGrapes(Anexo.getYear());
-	    	list.get(Anexo.getId()).setGrapes("bouscat.jpg");
-	    	list.get(Anexo.getId()).setGrapes(Anexo.getDescription());*/
-	 
-	    	
-	    	return anexo;
-	    	//
-	    	
-	 /*       Connection c = null;
-	        try {
-	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("UPDATE Anexo SET name=?, grapes=?, country=?, region=?, year=?, picture=?, description=? WHERE id=?");
-	            ps.setString(1, Anexo.getName());
-	            ps.setString(2, Anexo.getGrapes());
-	            ps.setString(3, Anexo.getCountry());
-	            ps.setString(4, Anexo.getRegion());
-	            ps.setString(5, Anexo.getYear());
-	            ps.setString(6, Anexo.getPicture());
-	            ps.setString(7, Anexo.getDescription());
-	            ps.setInt(8, Anexo.getId());
-	            ps.executeUpdate();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-			} finally {
-				ConnectionHelper.close(c);
-			}
-	        return Anexo;*/
-	    }
+	  	            	ps.setInt(9, anexo.getCodigo());
+	         
+	              
+	              ps.executeUpdate();
+	          } catch (SQLException e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
+	          return anexo;	    }
+
+ 
 
 	    public boolean remove(int id) {
-	    	
-	    	list.remove(id);
-	    	return true;
-	    	
-	       /* Connection c = null;
-	        try {
-	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("DELETE FROM Anexo WHERE id=?");
-	            ps.setInt(1, id);
-	            int count = ps.executeUpdate();
-	            return count == 1;
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-			} finally {
-				ConnectionHelper.close(c);
-			}*/
+	    	  Connection c = null;
+	          try {
+	              c = ConnectionHelper.getConnection();
+	              PreparedStatement ps = c.prepareStatement("DELETE FROM anexo WHERE codigo=?");
+	              ps.setInt(1, id);
+	              int count = ps.executeUpdate();
+	              return count == 1;
+	          } catch (Exception e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
 	    }
 
 	    protected AnexoModel processRow(ResultSet rs) throws SQLException {
+	    	
 	    	AnexoModel anexo = new AnexoModel();
-	    	  /* Anexo.setCodigo(i);
-	            Anexo.setNome("name" + i);
-	            Anexo.setCelular("celular" +i);
-	            Anexo.setEmail( "email"+ i);
-	            Anexo.setSenha( "senha"+ i);
-	        Anexo.setId(rs.getInt("id"));
-	        Anexo.setName(rs.getString("name"));
-	        Anexo.setGrapes(rs.getString("grapes"));
-	        Anexo.setCountry(rs.getString("country"));
-	        Anexo.setRegion(rs.getString("region"));
-	        Anexo.setYear(rs.getString("year"));
-	        Anexo.setPicture(rs.getString("picture"));
-	        Anexo.setDescription(rs.getString("description"));*/
-	        return anexo;
+	    	
+	    		anexo.setCodigo(rs.getInt("codigo"));
+	    		
+	    		//vai ser usado servidor de arquivos
+	    		//anexo.setArquivo(arquivo);
+	    		anexo.setCaminhoArquivo(rs.getString("caminhoArquivo"));
+	    		anexo.setCodigoConteudo(rs.getInt("codigoConteudo"));
+	    		anexo.setCodigoProva(rs.getInt("codigoProva"));
+	    		anexo.setCodigoTrabalho(rs.getInt("codigoTrabalho"));
+	    		anexo.setDescricaoArquivo(rs.getString("descricaoArquivo"));
+	    		anexo.setNome(rs.getString("nome"));
+	    		anexo.setTamanhoArquivo(rs.getString("tamanhoArquivo"));
+	    		anexo.setTipoArquivo(rs.getString("tipoArquivo"));
+	    		
+	   	            
+                return anexo;
 	    }
 	    
-	}
+	
 
+}

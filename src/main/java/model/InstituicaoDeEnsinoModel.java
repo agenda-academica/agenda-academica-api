@@ -112,14 +112,14 @@ public class InstituicaoDeEnsinoModel {
 	/**
 	 * @return the isProfessor
 	 */
-	public boolean isProfessor() {
+	public boolean getIsProfessor() {
 		return isProfessor;
 	}
 
 	/**
 	 * @param isProfessor the isProfessor to set
 	 */
-	public void setProfessor(boolean isProfessor) {
+	public void setIsProfessor(boolean isProfessor) {
 		this.isProfessor = isProfessor;
 	}
 

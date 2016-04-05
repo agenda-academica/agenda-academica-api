@@ -7,24 +7,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class NotaModel {
-
+	
 	private int codigo;
-
+	
 	//aqui verifico se é prova ou trabalho
 	private int codigoProva;
 	private int codigoTrabalho;
-
+	
 	private String descricao;
 	private int nota;
 	private UsuarioModel aluno;
-
+	private int codigoAluno;
 
 	//private boolean isProfessor;
-
+	
 	public NotaModel(){
-
+		
 	}
-
+	
 	/**
 	 * @return the codigo
 	 */
@@ -102,6 +102,14 @@ public class NotaModel {
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public int getCodigoAluno() {
+		return codigoAluno;
+	}
+
+	public void setCodigoAluno(int codigoAluno) {
+		this.codigoAluno = codigoAluno;
 	}
 
 

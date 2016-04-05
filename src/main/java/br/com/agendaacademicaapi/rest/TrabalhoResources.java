@@ -13,7 +13,9 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.AnexoDAO;
 import dao.TrabalhoDAO;
+import model.AnexoModel;
 import model.TrabalhoModel;
 
 	@Path("/trabalho")
@@ -40,6 +42,15 @@ import model.TrabalhoModel;
 		public TrabalhoModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<AnexoModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			AnexoDAO anexoDAO = new AnexoDAO();
+			return anexoDAO.findByFatherIdTrabalho(query);
 		}
 
 		@POST

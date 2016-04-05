@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de nota</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo nota</button>
+	<a href="index.html">Menu</a>
+</div>
+
+
+<div class="leftArea">
+<ul id="notaList"></ul>
+</div>
+
+<form id="notaForm">
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="notaId" name="id" type="text" disabled />
+
+<label>Nome:</label>
+<input type="text" id="name" name="name" required>
+
+<label>Celular:</label>
+<input type="text" id="grapes" name="grapes"/>
+
+<label>E-mail:</label>
+<input type="text" id="country" name="country"/>
+
+<label>Senha:</label>
+<input type="text" id="region" name="region"/>
+ 
+
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+</div> -->
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/nota.js"></script>
+
+</body>
+</html>

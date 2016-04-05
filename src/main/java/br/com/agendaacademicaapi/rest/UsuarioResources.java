@@ -12,7 +12,9 @@ package br.com.agendaacademicaapi.rest;
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.InstituicaoDeEnsinoDAO;
 import dao.UsuarioDAO;
+import model.InstituicaoDeEnsinoModel;
 import model.UsuarioModel;
 
 	@Path("/usuario")
@@ -41,12 +43,35 @@ import model.UsuarioModel;
 			return dao.findById(Integer.parseInt(codigo));
 		}
 
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<InstituicaoDeEnsinoModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			InstituicaoDeEnsinoDAO instituicaoDAO = new InstituicaoDeEnsinoDAO();
+			return instituicaoDAO.findByFatherId(query);
+		}
+
+/*		@GET @Path("login/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public boolean findByLogin(UsuarioModel usuario) {
+			//System.out.println("findByName: " + query);
+			return dao.login(usuario);
+		}*/
+
 		@POST
 		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 		public UsuarioModel create(UsuarioModel usuario) {
 			//System.out.println("creating usuario");
 			return dao.create(usuario);
+		}
+
+		@POST @Path("login")
+		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public boolean login(UsuarioModel usuario) {
+			//System.out.println("creating usuario");
+			return dao.login(usuario);
 		}
 
 		@PUT @Path("{id}")

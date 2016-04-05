@@ -10,6 +10,7 @@
 	import java.util.List;
 
 import model.AnoLetivoModel;
+import model.AnoLetivoModel;
  
 
 	/**
@@ -20,169 +21,236 @@ import model.AnoLetivoModel;
 	public class AnoLetivoDAO {
 
 		
-		List<AnoLetivoModel> list = new ArrayList<AnoLetivoModel>();
-		
 		public AnoLetivoDAO(){
 			
-				for (int i = 1;i <= 11; i++){
-	        	
-	            AnoLetivoModel AnoLetivoDeEnsino = new AnoLetivoModel();
-	            
-	            AnoLetivoDeEnsino.setCodigo(i);
-	            AnoLetivoDeEnsino.setAnoLetivo("201" + i);
-	            AnoLetivoDeEnsino.setDescricao("descricao do ano 201" + i);
-	             
-	                    list.add(AnoLetivoDeEnsino);
-	        	
-	        }
+				
+	       
 			
 		}
+
 
 	    public List<AnoLetivoModel> findAll() {
 	    	
 	 
+	List<AnoLetivoModel> list = new ArrayList<AnoLetivoModel>();
+	        
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM anoLetivo ORDER BY descricao";
+	    	
+	        try {
+	        	
+	            c = ConnectionHelper.getConnection();
+	            
+	            Statement s = c.createStatement();
+	            
+	            ResultSet rs = s.executeQuery(sql);
+	            
+	            while (rs.next()) {
+	            	
+	                list.add(processRow(rs));
+	                
+	            }
+	            
+	        } catch (SQLException e) {
+	        	
+	            e.printStackTrace();
+	            
+	            throw new RuntimeException(e);
+	            
+			} finally {
+				
+				ConnectionHelper.close(c);
+				
+			}
 	        return list;
 	    }
 
 	    
-	    public List<AnoLetivoModel> findByName(String name) {
-	    	List<AnoLetivoModel> listName = new ArrayList<AnoLetivoModel>();
+	    public List<AnoLetivoModel> findByName(String descricao) {
 	    	
-	     for(AnoLetivoModel item : list ) {
-	    	 if(item.getAnoLetivo().equals(name)){
-	    		listName.add(item);
-	    	 }
-	     }
-	     return listName;
-	    }
-	    
-	    public AnoLetivoModel findById(int id) {
-	  
-	        return list.get(id);
-	    }
-
-	    public AnoLetivoModel save(AnoLetivoModel AnoLetivoDeEnsino)
-		{
-			return AnoLetivoDeEnsino.getCodigo() > 0 ? update(AnoLetivoDeEnsino) : create(AnoLetivoDeEnsino);
-		}    
-	    
-	    public AnoLetivoModel create(AnoLetivoModel AnoLetivoDeEnsino) {
-	    	
-	    	//
-	    	AnoLetivoDeEnsino.setCodigo(list.size()+1);
-	    	list.add(AnoLetivoDeEnsino);
-	    	return AnoLetivoDeEnsino;
+	        List<AnoLetivoModel> list = new ArrayList<AnoLetivoModel>();
 	        
-	    	//
+	        Connection c = null;
+	        
+	    	String sql = "SELECT * FROM anoLetivo as e " +
+				"WHERE UPPER(descricao) LIKE ? " +	
+				"ORDER BY descricao";
 	    	
-	    	
-	    	
-	/*        Connection c = null;
-	        PreparedStatement ps = null;
 	        try {
 	            c = ConnectionHelper.getConnection();
-	            ps = c.prepareStatement("INSERT INTO AnoLetivoDeEnsino (name, grapes, country, region, year, picture, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
-	                new String[] { "ID" });
-	            ps.setString(1, AnoLetivoDeEnsino.getName());
-	            ps.setString(2, AnoLetivoDeEnsino.getGrapes());
-	            ps.setString(3, AnoLetivoDeEnsino.getCountry());
-	            ps.setString(4, AnoLetivoDeEnsino.getRegion());
-	            ps.setString(5, AnoLetivoDeEnsino.getYear());
-	            ps.setString(6, AnoLetivoDeEnsino.getPicture());
-	            ps.setString(7, AnoLetivoDeEnsino.getDescription());
-	            ps.executeUpdate();
-	            ResultSet rs = ps.getGeneratedKeys();
-	            rs.next();
-	            // Update the id in the returned object. This is important as this value must be returned to the client.
-	            int id = rs.getInt(1);
-	            AnoLetivoDeEnsino.setId(id);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-			} finally {
-				ConnectionHelper.close(c);
-			}
-	        return AnoLetivoDeEnsino;*/
-	        
-	        
-	    }
-
-	    public AnoLetivoModel update(AnoLetivoModel AnoLetivoDeEnsino) {
-	    	
-	    	//
-/*	    	list.get(AnoLetivoDeEnsino.getId()).setName(AnoLetivoDeEnsino.getName());
-	    	list.get(AnoLetivoDeEnsino.getId()).setGrapes(AnoLetivoDeEnsino.getGrapes());
-
-	    	list.get(AnoLetivoDeEnsino.getId()).setCountry(AnoLetivoDeEnsino.getCountry());
-	    	
-	    	list.get(AnoLetivoDeEnsino.getId()).setGrapes(AnoLetivoDeEnsino.getRegion());
-	    	list.get(AnoLetivoDeEnsino.getId()).setGrapes(AnoLetivoDeEnsino.getYear());
-	    	list.get(AnoLetivoDeEnsino.getId()).setGrapes("bouscat.jpg");
-	    	list.get(AnoLetivoDeEnsino.getId()).setGrapes(AnoLetivoDeEnsino.getDescription());*/
-	 
-	    	
-	    	return AnoLetivoDeEnsino;
-	    	//
-	    	
-	 /*       Connection c = null;
-	        try {
-	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("UPDATE AnoLetivoDeEnsino SET name=?, grapes=?, country=?, region=?, year=?, picture=?, description=? WHERE id=?");
-	            ps.setString(1, AnoLetivoDeEnsino.getName());
-	            ps.setString(2, AnoLetivoDeEnsino.getGrapes());
-	            ps.setString(3, AnoLetivoDeEnsino.getCountry());
-	            ps.setString(4, AnoLetivoDeEnsino.getRegion());
-	            ps.setString(5, AnoLetivoDeEnsino.getYear());
-	            ps.setString(6, AnoLetivoDeEnsino.getPicture());
-	            ps.setString(7, AnoLetivoDeEnsino.getDescription());
-	            ps.setInt(8, AnoLetivoDeEnsino.getId());
-	            ps.executeUpdate();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setString(1, "%" + descricao.toUpperCase() + "%");
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	                list.add(processRow(rs));
+	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            throw new RuntimeException(e);
 			} finally {
 				ConnectionHelper.close(c);
 			}
-	        return AnoLetivoDeEnsino;*/
+	        return list;
 	    }
-
-	    public boolean remove(int id) {
+	    
+	    public AnoLetivoModel findById(int id) {
+	  
+	    	String sql = "SELECT * FROM anoLetivo WHERE codigo = ?";
 	    	
-	    	list.remove(id);
-	    	return true;
+	    	AnoLetivoModel anoLetivo = null;
 	    	
-	       /* Connection c = null;
+	        Connection c = null;
+	        
 	        try {
 	            c = ConnectionHelper.getConnection();
-	            PreparedStatement ps = c.prepareStatement("DELETE FROM AnoLetivoDeEnsino WHERE id=?");
+	            PreparedStatement ps = c.prepareStatement(sql);
 	            ps.setInt(1, id);
-	            int count = ps.executeUpdate();
-	            return count == 1;
+	            ResultSet rs = ps.executeQuery();
+	            if (rs.next()) {
+	                anoLetivo = processRow(rs);
+	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            throw new RuntimeException(e);
 			} finally {
 				ConnectionHelper.close(c);
-			}*/
+			}
+	        return anoLetivo;
+	    }
+	    
+	    public List<AnoLetivoModel> findByFatherId(int id) {
+	    	
+	    	 List<AnoLetivoModel> list = new ArrayList<AnoLetivoModel>();
+	  	  
+	    	String sql = "SELECT * FROM anoLetivo WHERE codigoInstituicaoDeEnsino = ?";
+ 
+	        Connection c = null;
+	        
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            PreparedStatement ps = c.prepareStatement(sql);
+	            ps.setInt(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	list.add(processRow(rs));
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return list;
+	    }
+
+	    public AnoLetivoModel save(AnoLetivoModel anoLetivo)
+		{
+			return anoLetivo.getCodigo() > 0 ? update(anoLetivo) : create(anoLetivo);
+		}    
+	    
+	    public AnoLetivoModel create(AnoLetivoModel anoLetivo) {
+	    	
+	    	Connection c = null;
+	        PreparedStatement ps = null;
+	        try {
+	            c = ConnectionHelper.getConnection();
+	            ps = c.prepareStatement("INSERT INTO anoLetivo (anoLetivo, descricao, codigoInstituicaoDeEnsino) VALUES (?, ?, ?)",
+	                new String[] { "ID" });
+ 
+	            	ps.setString(1, anoLetivo.getAnoLetivo());
+	            	ps.setString(2, anoLetivo.getDescricao());
+	            	ps.setInt(3, anoLetivo.getCodigoInstituicaoDeEnsino());
+	            
+	            	//ps.setInt(4, anoLetivo.getCodigo());
+	    
+		            //depois ver como resolver os itens abaixo!
+		            //anoLetivo.setListaDeAnexos(listaDeAnexos);
+
+		    
+	  
+	            	ps.executeUpdate();
+	            
+	            ResultSet rs = ps.getGeneratedKeys();
+	            
+	            rs.next();
+	            
+	            // Update the id in the returned object. This is important as this value must be returned to the client.
+	            int id = rs.getInt(1);
+	            
+	            anoLetivo.setCodigo(id);
+	            
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException(e);
+			} finally {
+				ConnectionHelper.close(c);
+			}
+	        return anoLetivo;
+	        
+	    }
+
+	    public AnoLetivoModel update(AnoLetivoModel anoLetivo) {
+	    	 Connection c = null;
+	    	  
+	          try {
+	        	  
+	              c = ConnectionHelper.getConnection();
+	             		           
+	              PreparedStatement ps = c.prepareStatement("UPDATE anoLetivo SET anoLetivo=?, descricao=?, codigoInstituicaoDeEnsino=? WHERE codigo=?");
+	  
+	  	            	ps.setString(1, anoLetivo.getAnoLetivo());
+	  	            	ps.setString(2, anoLetivo.getDescricao());
+	  	            	ps.setInt(3, anoLetivo.getCodigoInstituicaoDeEnsino());
+	  	            
+	  	            	ps.setInt(4, anoLetivo.getCodigo());
+	         
+	              
+	              ps.executeUpdate();
+	          } catch (SQLException e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
+	          return anoLetivo;	    }
+
+ 
+
+	    public boolean remove(int id) {
+	    	  Connection c = null;
+	          try {
+	              c = ConnectionHelper.getConnection();
+	              PreparedStatement ps = c.prepareStatement("DELETE FROM anoLetivo WHERE codigo=?");
+	              ps.setInt(1, id);
+	              int count = ps.executeUpdate();
+	              return count == 1;
+	          } catch (Exception e) {
+	              e.printStackTrace();
+	              throw new RuntimeException(e);
+	  		} finally {
+	  			ConnectionHelper.close(c);
+	  		}
 	    }
 
 	    protected AnoLetivoModel processRow(ResultSet rs) throws SQLException {
-	    	AnoLetivoModel AnoLetivoDeEnsino = new AnoLetivoModel();
-	    	  /* AnoLetivoDeEnsino.setCodigo(i);
-	            AnoLetivoDeEnsino.setNome("name" + i);
-	            AnoLetivoDeEnsino.setCelular("celular" +i);
-	            AnoLetivoDeEnsino.setEmail( "email"+ i);
-	            AnoLetivoDeEnsino.setSenha( "senha"+ i);
-	        AnoLetivoDeEnsino.setId(rs.getInt("id"));
-	        AnoLetivoDeEnsino.setName(rs.getString("name"));
-	        AnoLetivoDeEnsino.setGrapes(rs.getString("grapes"));
-	        AnoLetivoDeEnsino.setCountry(rs.getString("country"));
-	        AnoLetivoDeEnsino.setRegion(rs.getString("region"));
-	        AnoLetivoDeEnsino.setYear(rs.getString("year"));
-	        AnoLetivoDeEnsino.setPicture(rs.getString("picture"));
-	        AnoLetivoDeEnsino.setDescription(rs.getString("description"));*/
-	        return AnoLetivoDeEnsino;
+	    	
+	    	AnoLetivoModel anoLetivo = new AnoLetivoModel();
+
+	    		anoLetivo.setCodigo(rs.getInt("codigo"));
+	    		anoLetivo.setAnoLetivo(rs.getString("anoLetivo"));
+	    		anoLetivo.setDescricao(rs.getString("descricao"));
+	    		anoLetivo.setCodigoInstituicaoDeEnsino(rs.getInt("codigoInstituicaoDeEnsino"));
+
+	            //depois ver como resolver os itens abaixo!
+	            //anoLetivo.setListaDeCursos(listaDeCursos);
+ 
+
+	        return anoLetivo;
 	    }
 	    
 	}
+
+
+
 

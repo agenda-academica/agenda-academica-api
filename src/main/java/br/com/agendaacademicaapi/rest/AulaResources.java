@@ -13,8 +13,16 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.AnexoDAO;
 import dao.AulaDAO;
+import dao.ConteudoDAO;
+import dao.ProvaDAO;
+import dao.TrabalhoDAO;
+import model.AnexoModel;
 import model.AulaModel;
+import model.ConteudoModel;
+import model.ProvaModel;
+import model.TrabalhoModel;
 
 	@Path("/aula")
 	public class AulaResources {
@@ -40,6 +48,30 @@ import model.AulaModel;
 		public AulaModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+		@GET @Path("findByChildrenIdProva/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<ProvaModel> findByChildrenIdProva(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			ProvaDAO provaDAO = new ProvaDAO();
+			return provaDAO.findByFatherId(query);
+		}
+
+		@GET @Path("findByChildrenIdConteudo/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<ConteudoModel> findByChildrenIdConteudo(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			ConteudoDAO conteudoDAO = new ConteudoDAO();
+			return conteudoDAO.findByFatherId(query);
+		}
+
+		@GET @Path("findByChildrenIdTrabalho/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<TrabalhoModel> findByChildrenIdTrabalho(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			TrabalhoDAO trabahoDao = new TrabalhoDAO();
+			return trabahoDao.findByFatherId(query);
 		}
 
 		@POST

@@ -9,17 +9,18 @@ import config.Config;
 
 public class ConnectionHelper
 {
-	private ConnectionHelper() {}
-	
+	private String url;
+	private static ConnectionHelper instance;
+
 	public static Connection getConnection() throws SQLException {
 		Properties properties = Config.getProperties();
-		
+
         try {
 			Class.forName(properties.getProperty("database.driverClass"));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-        
+
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         return DriverManager.getConnection(
             String.format(
@@ -33,7 +34,18 @@ public class ConnectionHelper
             properties.getProperty("database.password")
         );
 	}
-	
+
+	public static Connection getConnectionTeste() throws SQLException {
+		if (instance == null) {
+			instance = new ConnectionHelper();
+		}
+		try {
+			return DriverManager.getConnection(instance.url);
+		} catch (SQLException e) {
+			throw e;
+		}
+	}
+
 	public static void close(Connection connection)
 	{
 		try {

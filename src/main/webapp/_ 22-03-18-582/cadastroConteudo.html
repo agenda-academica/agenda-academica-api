@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de conteudo</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo conteudo</button>
+</div>
+
+
+<div class="leftArea">
+<ul id="conteudoList"></ul>
+</div>
+
+<form id="conteudoForm">
+
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="conteudoId" name="id" type="text" disabled />
+
+<label>Nome:</label>
+<input type="text" id="nome" name="nome" required>
+
+<label>descricao:</label>
+<input type="text" id="descricao" name="descricao"/>
+
+<label>codigoAula:</label>
+<input type="text" id="codigoAula" name="codigoAula"/>
+  
+
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+
+ 
+	private ArrayList<AnexoModel> listaDeAnexos = new ArrayList<AnexoModel>();
+</div> -->
+
+<div class="rightArea">
+<label>lista de Anexos:</label>
+<ul id="listaDeAnexos"></ul>
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/conteudo.js"></script>
+
+</body>
+</html>

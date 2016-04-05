@@ -13,7 +13,11 @@
 	import javax.ws.rs.Produces;
 	import javax.ws.rs.core.MediaType;
 
+import dao.AulaDAO;
+import dao.InstituicaoDeEnsinoDAO;
 import dao.MateriaDAO;
+import model.AulaModel;
+import model.InstituicaoDeEnsinoModel;
 import model.MateriaModel;
 
 	@Path("/materia")
@@ -40,6 +44,14 @@ import model.MateriaModel;
 		public MateriaModel findById(@PathParam("id") String codigo) {
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
+		}
+
+		@GET @Path("findByChildrenId/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<AulaModel> findByChildrenId(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			AulaDAO aulaDAO = new AulaDAO();
+			return aulaDAO.findByFatherId(query);
 		}
 
 		@POST

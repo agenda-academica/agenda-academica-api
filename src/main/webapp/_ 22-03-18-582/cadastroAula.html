@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de aula</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo aula</button>
+</div>
+
+
+<div class="leftArea">
+<ul id="aulaList"></ul>
+</div>
+
+<form id="aulaForm">
+
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="aulaId" name="id" type="text" disabled />
+
+<label>assunto:</label>
+<input type="text" id="assunto" name="assunto" required>
+
+<label>data:</label>
+<input type="text" id="data" name="data"/>
+
+<label>codigoMateria:</label>
+<input type="text" id="codigoMateria" name="codigoMateria"/>
+
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+ 
+ 
+	//aqui as 3 listas, de conteudo, trabalho e prova
+	private ArrayList<ConteudoModel> listaDeConteudo = new ArrayList<ConteudoModel>();
+	
+	private ArrayList<ProvaModel> listaDeProva = new ArrayList<ProvaModel>();
+	
+	private ArrayList<TrabalhoModel> listaDeTrabalho = new ArrayList<TrabalhoModel>();
+
+	
+</div> -->
+
+
+<div class="rightArea">
+
+<label>lista de Trabalhos:</label>
+<ul id="listaDeTrabalho"></ul>
+
+
+<label>lista de Provas:</label>
+<ul id="listaDeProva"></ul>
+
+<label>lista de Conteudo:</label>
+<ul id="listaDeConteudo"></ul>
+
+
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/aula.js"></script>
+
+</body>
+</html>

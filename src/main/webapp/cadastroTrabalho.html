@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cadastro de trabalho</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+<div class="header">
+	<input type="text" id="searchKey"/>
+	<button id="btnSearch">Pesquisar</button>
+	<button id="btnAdd">Criar Novo trabalho</button>
+	<a href="index.html">Menu</a>
+</div>
+
+
+<div class="leftArea">
+<ul id="trabalhoList"></ul>
+</div>
+
+<form id="trabalhoForm">
+
+	
+<div class="mainArea">
+
+<label>Código:</label>
+<input id="trabalhoId" name="id" type="text" disabled />
+
+<label>Descrição:</label>
+<input type="text" id="descricao" name="descricao" required>
+
+<label>Data de Entrega:</label>
+<input type="date" id="dataDeEntrega" name="dataDeEntrega"/>
+
+<label>Código da Aula:</label>
+<input type="text" id="codigoAula" name="codigoAula"/>
+ 
+<button id="btnSave">Salvar</button>
+<button id="btnDelete">Deletar</button>
+
+</div>
+
+<!-- 
+<div class="rightArea">
+
+<img id="pic" height="300"/>
+
+<label>Notes:</label>
+<textarea id="description" name="description"></textarea>
+
+ 
+	private ArrayList<AnexoModel> listaDeAnexos = new ArrayList<AnexoModel>();
+ 
+	//AQUI NA PARTE DA NOTA VAI FICAR EM OFF POR ENQUANTO
+	//caso for aluno
+	private String nota;
+	
+	//caso for professor
+	private ArrayList<NotaModel> listaDeNotas = new ArrayList<NotaModel>();
+
+	//mas tem que pensar em um jeito melhor de fazer isso
+</div> -->
+
+<div class="rightArea">
+<label>lista de Anexos:</label>
+<ul id="listaDeAnexos"></ul>
+</div>
+
+</form>
+
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/trabalho.js"></script>
+
+</body>
+</html>

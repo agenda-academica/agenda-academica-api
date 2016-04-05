@@ -14,7 +14,11 @@
 	import javax.ws.rs.core.MediaType;
 
 import dao.CursoDAO;
+import dao.MateriaDAO;
+import dao.TurmaDAO;
 import model.CursoModel;
+import model.MateriaModel;
+import model.TurmaModel;
 
 
 	@Path("/curso")
@@ -42,6 +46,23 @@ import model.CursoModel;
 			//System.out.println("findById " + codigo);
 			return dao.findById(Integer.parseInt(codigo));
 		}
+
+		@GET @Path("findByChildrenIdTurmas/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<TurmaModel> findByChildrenIdTurmas(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			TurmaDAO turmaDAO = new TurmaDAO();
+			return turmaDAO.findByFatherId(query);
+		}
+
+		@GET @Path("findByChildrenIdMaterias/{query}")
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public List<MateriaModel> findByChildrenIdMaterias(@PathParam("query") int query) {
+			//System.out.println("findByName: " + query);
+			MateriaDAO materiaDAO = new MateriaDAO();
+			return materiaDAO.findByFatherIdCurso(query);
+		}
+
 
 		@POST
 		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
