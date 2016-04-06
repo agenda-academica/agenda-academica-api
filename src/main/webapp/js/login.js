@@ -1,6 +1,7 @@
 // The root URL for the RESTful services
-var rootURL = "http://localhost:8080/agenda-academica-api/rest/usuario";
-//var rootURL = "http://192.168.25.26:8080/AgendaAcademica/rest/usuario";
+var rootURL = /localhost/g.test(window.location.host)
+? 'http://localhost:8080/agenda-academica-api/rest/usuario'
+: 'https://infinite-wave-42974.herokuapp.com/rest/usuario';
 
 var currentusuario;
 

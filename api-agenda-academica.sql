@@ -104,11 +104,12 @@ CREATE TABLE IF NOT EXISTS `Turma` (
   PRIMARY KEY (`codigo`))
 ENGINE = MyISAM;
 
-CREATE TABLE IF NOT EXISTS `Usuario` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(50) NOT NULL,
-  `celular` VARCHAR(20) NOT NULL,
-  `senha` VARCHAR(100) NOT NULL,
+CREATE TABLE `Usuario` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(75) DEFAULT NULL,
+  `login` varchar(75) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `celular` varchar(20) DEFAULT NULL,
+  `senha` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`codigo`))
 ENGINE = MyISAM;
