@@ -172,8 +172,7 @@ function renderList(data) {
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
 	$('#usuarioList li').remove();
-	$.each(list, function(index, listItem) {
-		var usuario = listItem.usuarioModel;
+	$.each(list[0].usuarioModel, function(index, usuario) {
 		$('#usuarioList').append('<li><a href="#" data-identity="' + usuario.codigo + '">'+usuario.nome+'</a></li>');
 	});
 }

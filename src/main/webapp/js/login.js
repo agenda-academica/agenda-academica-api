@@ -113,8 +113,9 @@ function loginUsuario() {
 		dataType: "json",
 		data: formToJSON(),
 		success: function(data, textStatus, jqXHR){
-
-			if(data == true){
+			
+			console.log(typeof data.response);
+			if(data.response === 'true'){
 				alert('Usuario com acesso ao sistema! ');
 			}
 			else{

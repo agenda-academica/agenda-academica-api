@@ -14,6 +14,7 @@ package br.com.agendaacademicaapi.rest;
 
 import dao.InstituicaoDeEnsinoDAO;
 import dao.UsuarioDAO;
+import model.BooleanModel;
 import model.InstituicaoDeEnsinoModel;
 import model.UsuarioModel;
 
@@ -69,7 +70,7 @@ import model.UsuarioModel;
 		@POST @Path("login")
 		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-		public boolean login(UsuarioModel usuario) {
+		public BooleanModel login(UsuarioModel usuario) {
 			//System.out.println("creating usuario");
 			return dao.login(usuario);
 		}

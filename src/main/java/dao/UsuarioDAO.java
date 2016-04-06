@@ -8,6 +8,7 @@ package dao;
 	import java.util.ArrayList;
 	import java.util.List;
 
+import model.BooleanModel;
 import model.NotaModel;
 import model.UsuarioModel;
 
@@ -213,9 +214,10 @@ import model.UsuarioModel;
 	  		}
 	    }
 	    
-	    public boolean login(UsuarioModel usuario) {
+	    public BooleanModel login(UsuarioModel usuario) {
 	    	 Connection c = null;
-		        
+	    	 BooleanModel booleanModel = new BooleanModel();   
+	    	 
 		    	String sql = "SELECT * FROM usuario where login = ? and senha = ?";
 		    	
 		        try {
@@ -227,7 +229,8 @@ import model.UsuarioModel;
 			            
 			            ResultSet rs = ps.executeQuery();
 			            if (rs.next()) {
-			                return true;
+			            	booleanModel.setResponse(true);
+			                return booleanModel;
 			            }
 		            
 		        } catch (SQLException e) {
@@ -241,7 +244,8 @@ import model.UsuarioModel;
 					ConnectionHelper.close(c);
 					
 				}
-		        return false;
+            	booleanModel.setResponse(false);
+		        return booleanModel;
 		    }
 
 	    protected UsuarioModel processRow(ResultSet rs) throws SQLException {
