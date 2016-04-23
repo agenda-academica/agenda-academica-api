@@ -12,54 +12,47 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.InstituicaoDeEnsinoDAO;
-import dao.UnidadeDAO;
-import model.InstituicaoDeEnsinoModel;
-import model.UnidadeModel;
+import dao.DisciplinaDAO;
+import model.DisciplinaModel;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+//MUDAR AQUI DE MATERIA PARA DISCIPLINA!
+@Path("/disciplina")
+public class DisciplinaResources {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+    DisciplinaDAO dao = new DisciplinaDAO();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
+    public List<DisciplinaModel> findAll() {
         return dao.findAll();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<DisciplinaModel> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public DisciplinaModel findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
     }
 
-    @GET @Path("findByChildrenId/{query}")
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
-        UnidadeDAO anoDAO = new UnidadeDAO();
-        return anoDAO.findByFatherId(query);
-    }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public DisciplinaModel create(DisciplinaModel disciplina) {
+        return dao.create(disciplina);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public DisciplinaModel update(DisciplinaModel disciplina) {
+        dao.update(disciplina);
+        return disciplina;
     }
 
     @DELETE @Path("{id}")

@@ -12,54 +12,54 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.InstituicaoDeEnsinoDAO;
-import dao.UnidadeDAO;
-import model.InstituicaoDeEnsinoModel;
-import model.UnidadeModel;
+import dao.EventoDAO;
+import model.EventoModel;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+@Path("/evento")
+public class EventoResources {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+    EventoDAO dao = new EventoDAO();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
+    public List<EventoModel> findAll() {
         return dao.findAll();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<EventoModel> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public EventoModel findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
     }
 
+    /*
     @GET @Path("findByChildrenId/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
-        UnidadeDAO anoDAO = new UnidadeDAO();
-        return anoDAO.findByFatherId(query);
+    public List<AnexoModel_TALVEZ_NAO_SERA_USADA> findByChildrenId(@PathParam("query") int query) {
+        AnexoDAO_TALVEZ_NAO_SERA_USADO anexoDAO = new AnexoDAO_TALVEZ_NAO_SERA_USADO();
+        return anexoDAO.findByFatherIdevento(query);
     }
+    */
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public EventoModel create(EventoModel evento) {
+        return dao.create(evento);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public EventoModel update(EventoModel evento) {
+        dao.update(evento);
+        return evento;
     }
 
     @DELETE @Path("{id}")

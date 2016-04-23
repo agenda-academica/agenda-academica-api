@@ -8,19 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.TurmaModel;
+import model.UnidadeModel;
 
 /**
  * @author Sergio Eduardo Bertolazo
  */
-public class TurmaDAO {
-    //List<TurmaModel> list = new ArrayList<TurmaModel>();
-    public TurmaDAO() {}
+public class UnidadeDAO {
+    public UnidadeDAO() {}
 
-    public List<TurmaModel> findAll() {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
+    public List<UnidadeModel> findAll() {
+        List<UnidadeModel> list = new ArrayList<UnidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma ORDER BY nome";
+        String sql = "SELECT * FROM unidade ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -37,10 +36,10 @@ public class TurmaDAO {
         return list;
     }
 
-    public List<TurmaModel> findByName(String nome) {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
+    public List<UnidadeModel> findByName(String nome) {
+        List<UnidadeModel> list = new ArrayList<UnidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma as e " +
+        String sql = "SELECT * FROM unidade as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -60,9 +59,9 @@ public class TurmaDAO {
         return list;
     }
 
-    public TurmaModel findById(int id) {
-        String sql = "SELECT * FROM turma WHERE codigo = ?";
-        TurmaModel turma = null;
+    public UnidadeModel findById(int id) {
+        String sql = "SELECT * FROM unidade WHERE codigo = ?";
+        UnidadeModel unidade = null;
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -70,7 +69,7 @@ public class TurmaDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                turma = processRow(rs);
+                unidade = processRow(rs);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,12 +77,12 @@ public class TurmaDAO {
         } finally {
             ConnectionHelper.close(c);
         }
-        return turma;
+        return unidade;
     }
 
-    public List<TurmaModel> findByFatherId(int id) {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
-        String sql = "SELECT * FROM turma WHERE codigoCurso = ?";
+    public List<UnidadeModel> findByFatherId(int id) {
+        List<UnidadeModel> list = new ArrayList<UnidadeModel>();
+        String sql = "SELECT * FROM unidade WHERE codigoUnidade = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -102,22 +101,30 @@ public class TurmaDAO {
         return list;
     }
 
-    public TurmaModel save(TurmaModel turma)
+    public UnidadeModel save(UnidadeModel unidade)
     {
-        return turma.getCodigo() > 0 ? update(turma) : create(turma);
+        return unidade.getCodigo() > 0 ? update(unidade) : create(unidade);
     }
 
-    public TurmaModel create(TurmaModel turma) {
+    public UnidadeModel create(UnidadeModel unidade) {
         Connection c = null;
         PreparedStatement ps = null;
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO turma (nome, codigoCurso) VALUES (?, ?)",
+                "INSERT INTO unidade (nome, codigoUnidade) VALUES (?, ?)",
                 new String[] { "ID" }
             );
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
+            ps.setString(1, unidade.getNome());
+            ps.setInt(2, unidade.getCodigoIntituicaoDeEnsino());
+            // ps.setString(2, unidade.getDescricao());
+            // ps.setInt(3, unidade.getCodigoAnoLetivo());
+            // ps.setString(4, unidade.getAreaDoConhecimento());
+
+            // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
+            // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
+
+            //ps.setInt(5, unidade.getCodigo());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -125,39 +132,41 @@ public class TurmaDAO {
 
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            turma.setCodigo(id);
+            unidade.setCodigo(id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
-        return turma;
+        return unidade;
     }
 
-    public TurmaModel update(TurmaModel turma) {
-        Connection c = null;
-        try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE turma SET nome=?, codigoCurso=? WHERE codigo=?");
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
-            ps.setInt(3, turma.getCodigo());
-            ps.executeUpdate();
-        } catch (SQLException e) {
+    public UnidadeModel update(UnidadeModel unidade) {
+          Connection c = null;
+          try {
+                c = ConnectionHelper.getConnection();
+                PreparedStatement ps = c.prepareStatement("UPDATE unidade SET nome=? cdigoUnidade=? WHERE codigo=?");
+                ps.setString(1, unidade.getNome());
+                ps.setInt(2, unidade.getCodigoIntituicaoDeEnsino());
+                // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
+                // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
+                ps.setInt(5, unidade.getCodigo());
+                ps.executeUpdate();
+          } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
-        return turma;
+        return unidade;
     }
 
     public boolean remove(int id) {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM turma WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM unidade WHERE codigo=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
             return count == 1;
@@ -169,17 +178,16 @@ public class TurmaDAO {
         }
     }
 
-    protected TurmaModel processRow(ResultSet rs) throws SQLException {
-        TurmaModel turma = new TurmaModel();
-        turma.setCodigo(rs.getInt("codigo"));
-        turma.setNome(rs.getString("nome"));
-        turma.setCodigoCurso(rs.getInt("codigoCurso"));
-        /*
-        turma.setListaDeAlunos(listaDeAlunos);
-        turma.setListaDeMateria(listaDeMateria);
-        turma.setListaDeRepresentantes(listaDeRepresentantes);
-        */
-        return turma;
+    protected UnidadeModel processRow(ResultSet rs) throws SQLException {
+        UnidadeModel unidade = new UnidadeModel();
+        unidade.setCodigo(rs.getInt("codigo"));
+        unidade.setNome(rs.getString("nome"));
+        unidade.setCodigoIntituicaoDeEnsino(rs.getInt("codigoUniversidade"));
+        // unidade.setAreaDoConhecimento(rs.getString("areaDoConhecimento"));
+        // unidade.setCodigoAnoLetivo(rs.getInt("codigoAnoLetivo"));
+        // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
+        // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
+        return unidade;
     }
 
 }

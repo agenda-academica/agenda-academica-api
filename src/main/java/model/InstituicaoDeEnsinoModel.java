@@ -7,164 +7,50 @@ import java.util.ArrayList;
  */
 @XmlRootElement
 public class InstituicaoDeEnsinoModel {
-	
-	private int codigo;
-	private int codigoUsuario;
-	private String nome;
-	private String email;
-	private String site;
-	private String descricao;
-	private String telefone;
-	private String unidade;
-	private boolean isProfessor;
-	
-	private ArrayList<AnoLetivoModel> listaDeAnosLetivos = new ArrayList<AnoLetivoModel>();
-	
-	
-	public InstituicaoDeEnsinoModel(){
-		
-	}
+    private int codigo;
+    private int codigoUsuario;
+    private String nome;
+    // private String email;
+    // private String site;
+    // private String descricao;
+    // private String telefone;
+    private ArrayList<UnidadeModel> listaDeUnidades = new ArrayList<UnidadeModel>();
 
-	/**
-	 * @return the codigo
-	 */
-	public int getCodigo() {
-		return codigo;
-	}
+    //ALTERAÇÃO
+    //CRIAR LISTA DE lista de unidades(SERA NESCESSARIO UM NOVO MODEL)
+    //private ArrayList<AnoLetivoModel> listaDeAnosLetivos = new ArrayList<AnoLetivoModel>();
 
-	/**
-	 * @param codigo the codigo to set
-	 */
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
+    public InstituicaoDeEnsinoModel() {}
 
-	/**
-	 * @return the nome
-	 */
-	public String getNome() {
-		return nome;
-	}
+    public int getCodigo() {
+        return codigo;
+    }
 
-	/**
-	 * @param nome the nome to set
-	 */
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	/**
-	 * @return the descricao
-	 */
-	public String getDescricao() {
-		return descricao;
-	}
+    public int getCodigoUsuario() {
+        return codigoUsuario;
+    }
 
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setCodigoUsuario(int codigoUsuario) {
+        this.codigoUsuario = codigoUsuario;
+    }
 
-	/**
-	 * @return the telefone
-	 */
-	public String getTelefone() {
-		return telefone;
-	}
+    public ArrayList<UnidadeModel> getListaDeUnidades() {
+        return listaDeUnidades;
+    }
 
-	/**
-	 * @param telefone the telefone to set
-	 */
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	/**
-	 * @return the unidade
-	 */
-	public String getUnidade() {
-		return unidade;
-	}
-
-	/**
-	 * @param unidade the unidade to set
-	 */
-	public void setUnidade(String unidade) {
-		this.unidade = unidade;
-	}
-
-	/**
-	 * @return the isProfessor
-	 */
-	public boolean getIsProfessor() {
-		return isProfessor;
-	}
-
-	/**
-	 * @param isProfessor the isProfessor to set
-	 */
-	public void setIsProfessor(boolean isProfessor) {
-		this.isProfessor = isProfessor;
-	}
-
-	/**
-	 * @return the site
-	 */
-	public String getSite() {
-		return site;
-	}
-
-	/**
-	 * @param site the site to set
-	 */
-	public void setSite(String site) {
-		this.site = site;
-	}
-
-	/**
-	 * @return the codigoUsuario
-	 */
-	public int getCodigoUsuario() {
-		return codigoUsuario;
-	}
-
-	/**
-	 * @param codigoUsuario the codigoUsuario to set
-	 */
-	public void setCodigoUsuario(int codigoUsuario) {
-		this.codigoUsuario = codigoUsuario;
-	}
-
-	/**
-	 * @return the listaDeAnosLetivos
-	 */
-	public ArrayList<AnoLetivoModel> getListaDeAnosLetivos() {
-		return listaDeAnosLetivos;
-	}
-
-	/**
-	 * @param listaDeAnosLetivos the listaDeAnosLetivos to set
-	 */
-	public void setListaDeAnosLetivos(ArrayList<AnoLetivoModel> listaDeAnosLetivos) {
-		this.listaDeAnosLetivos = listaDeAnosLetivos;
-	}
+    public void setListaDeUnidades(ArrayList<UnidadeModel> listaDeUnidades) {
+        this.listaDeUnidades = listaDeUnidades;
+    }
 }
-	
-	
-	 

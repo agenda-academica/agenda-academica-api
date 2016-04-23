@@ -12,54 +12,72 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.InstituicaoDeEnsinoDAO;
+import dao.CursoDAO;
 import dao.UnidadeDAO;
-import model.InstituicaoDeEnsinoModel;
+import model.CursoModel;
 import model.UnidadeModel;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+@Path("/unidade")
+public class UnidadeResources {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+    UnidadeDAO dao = new UnidadeDAO();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
+    public List<UnidadeModel> findAll() {
         return dao.findAll();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<UnidadeModel> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public UnidadeModel findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
     }
 
-    @GET @Path("findByChildrenId/{query}")
+    /*
+    @GET @Path("findByChildrenIdProva/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
-        UnidadeDAO anoDAO = new UnidadeDAO();
-        return anoDAO.findByFatherId(query);
+    public List<ProvaModel> findByChildrenIdProva(@PathParam("query") int query) {
+        ProvaDAO provaDAO = new ProvaDAO();
+        return provaDAO.findByFatherId(query);
+    }
+    */
+
+    /*
+    @GET @Path("findByChildrenIdConteudo/{query}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<ConteudoModel> findByChildrenIdConteudo(@PathParam("query") int query) {
+        ConteudoDAO conteudoDAO = new ConteudoDAO();
+        return conteudoDAO.findByFatherId(query);
+    }
+    */
+
+    @GET @Path("findByChildrenIdCusro/{query}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<CursoModel> findByChildrenIdTrabalho(@PathParam("query") int query) {
+        CursoDAO trabahoDao = new CursoDAO();
+        return trabahoDao.findByFatherId(query);
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public UnidadeModel create(UnidadeModel unidade) {
+        return dao.create(unidade);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public UnidadeModel update(UnidadeModel unidade) {
+        dao.update(unidade);
+        return unidade;
     }
 
     @DELETE @Path("{id}")

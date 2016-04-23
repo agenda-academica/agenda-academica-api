@@ -12,54 +12,45 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.InstituicaoDeEnsinoDAO;
-import dao.UnidadeDAO;
-import model.InstituicaoDeEnsinoModel;
-import model.UnidadeModel;
+import dao.AnexoDAO_TALVEZ_NAO_SERA_USADO;
+import model.AnexoModel_TALVEZ_NAO_SERA_USADA;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+@Path("/anexo")
+public class AnexoResources_TALVEZ_NAO_SERA_USADO {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+    AnexoDAO_TALVEZ_NAO_SERA_USADO dao = new AnexoDAO_TALVEZ_NAO_SERA_USADO();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
+    public List<AnexoModel_TALVEZ_NAO_SERA_USADA> findAll() {
         return dao.findAll();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<AnexoModel_TALVEZ_NAO_SERA_USADA> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public AnexoModel_TALVEZ_NAO_SERA_USADA findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
-    }
-
-    @GET @Path("findByChildrenId/{query}")
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
-        UnidadeDAO anoDAO = new UnidadeDAO();
-        return anoDAO.findByFatherId(query);
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public AnexoModel_TALVEZ_NAO_SERA_USADA create(AnexoModel_TALVEZ_NAO_SERA_USADA anexo) {
+        return dao.create(anexo);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public AnexoModel_TALVEZ_NAO_SERA_USADA update(AnexoModel_TALVEZ_NAO_SERA_USADA anexo) {
+        dao.update(anexo);
+        return anexo;
     }
 
     @DELETE @Path("{id}")

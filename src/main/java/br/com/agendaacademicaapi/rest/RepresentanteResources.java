@@ -13,53 +13,61 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import dao.InstituicaoDeEnsinoDAO;
-import dao.UnidadeDAO;
+import dao.RepresentanteDAO;
 import model.InstituicaoDeEnsinoModel;
-import model.UnidadeModel;
+import model.RepresentanteModel;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+@Path("/representante")
+public class RepresentanteResources {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+    RepresentanteDAO dao = new RepresentanteDAO();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
+    public List<RepresentanteModel> findAll() {
         return dao.findAll();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<RepresentanteModel> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public RepresentanteModel findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
     }
 
     @GET @Path("findByChildrenId/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
-        UnidadeDAO anoDAO = new UnidadeDAO();
-        return anoDAO.findByFatherId(query);
+    public List<InstituicaoDeEnsinoModel> findByChildrenId(@PathParam("query") int query) {
+        InstituicaoDeEnsinoDAO instituicaoDAO = new InstituicaoDeEnsinoDAO();
+        return instituicaoDAO.findByFatherId(query);
     }
+
+    /*
+    @GET @Path("login/{query}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public boolean findByLogin(RepresentanteModel representante) {
+        return dao.login(representante);
+    }
+    */
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public RepresentanteModel create(RepresentanteModel representante) {
+        return dao.create(representante);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public RepresentanteModel update(RepresentanteModel representante) {
+        dao.update(representante);
+        return representante;
     }
 
     @DELETE @Path("{id}")

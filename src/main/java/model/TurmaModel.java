@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,134 +8,58 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class TurmaModel {
-	
-	private int codigo;
-	
-	//caso for professor so
-	private int codigoCurso;
-	
-	private String nome;
-	private String descricao;
-	private String emailTurma;
-	private ArrayList<UsuarioModel> listaDeAlunos = new ArrayList<UsuarioModel>();
-	private ArrayList<UsuarioModel> listaDeRepresentantes = new ArrayList<UsuarioModel>();
+    private int codigo;
+    //caso for professor so
+    private int codigoCurso;
+    private String nome;
+    //private String descricao;
+    //private String emailTurma;
+    //private ArrayList<UsuarioModel> listaDeAlunos = new ArrayList<UsuarioModel>();
+    private ArrayList<UsuarioModel> listaDeRepresentantes = new ArrayList<UsuarioModel>();
+    //private boolean isProfessor = true;
+    //SOMENTE CASO FOR PROFESSOR!!!!!!
+    private ArrayList<DisciplinaModel> listaDeDisciplina = new ArrayList<DisciplinaModel>();
 
-	//private boolean isProfessor = true;
-	
-	//SOMENTE CASO FOR PROFESSOR!!!!!!
-	private ArrayList<MateriaModel> listaDeMateria = new ArrayList<MateriaModel>();
- 
-	
-	public TurmaModel(){
-		
-	}
+    public TurmaModel() {}
 
-	/**
-	 * @return the codigo
-	 */
-	public int getCodigo() {
-		return codigo;
-	}
+    public int getCodigo() {
+        return codigo;
+    }
 
-	/**
-	 * @param codigo the codigo to set
-	 */
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
-	/**
-	 * @return the nome
-	 */
-	public String getNome() {
-		return nome;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	/**
-	 * @param nome the nome to set
-	 */
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	/**
-	 * @return the descricao
-	 */
-	public String getDescricao() {
-		return descricao;
-	}
 
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public ArrayList<UsuarioModel> getListaDeRepresentantes() {
+        return listaDeRepresentantes;
+    }
 
-	/**
-	 * @return the listaDeAlunos
-	 */
-	public ArrayList<UsuarioModel> getListaDeAlunos() {
-		return listaDeAlunos;
-	}
+    public void setListaDeRepresentantes(ArrayList<UsuarioModel> listaDeRepresentantes) {
+        this.listaDeRepresentantes = listaDeRepresentantes;
+    }
 
-	/**
-	 * @param listaDeAlunos the listaDeAlunos to set
-	 */
-	public void setListaDeAlunos(ArrayList<UsuarioModel> listaDeAlunos) {
-		this.listaDeAlunos = listaDeAlunos;
-	}
+    public ArrayList<DisciplinaModel> getListaDeMateria() {
+        return listaDeDisciplina;
+    }
 
-	/**
-	 * @return the listaDeRepresentantes
-	 */
-	public ArrayList<UsuarioModel> getListaDeRepresentantes() {
-		return listaDeRepresentantes;
-	}
+    public void setListaDeMateria(ArrayList<DisciplinaModel> listaDeMateria) {
+        this.listaDeDisciplina = listaDeMateria;
+    }
 
-	/**
-	 * @param listaDeRepresentantes the listaDeRepresentantes to set
-	 */
-	public void setListaDeRepresentantes(ArrayList<UsuarioModel> listaDeRepresentantes) {
-		this.listaDeRepresentantes = listaDeRepresentantes;
-	}
+    public int getCodigoCurso() {
+        return codigoCurso;
+    }
 
-	/**
-	 * @return the listaDeMateria
-	 */
-	public ArrayList<MateriaModel> getListaDeMateria() {
-		return listaDeMateria;
-	}
-
-	/**
-	 * @param listaDeMateria the listaDeMateria to set
-	 */
-	public void setListaDeMateria(ArrayList<MateriaModel> listaDeMateria) {
-		this.listaDeMateria = listaDeMateria;
-	}
-
-	/**
-	 * @return the codigoCurso
-	 */
-	public int getCodigoCurso() {
-		return codigoCurso;
-	}
-
-	/**
-	 * @param codigoCurso the codigoCurso to set
-	 */
-	public void setCodigoCurso(int codigoCurso) {
-		this.codigoCurso = codigoCurso;
-	}
-
-	public String getEmailTurma() {
-		return emailTurma;
-	}
-
-	public void setEmailTurma(String emailTurma) {
-		this.emailTurma = emailTurma;
-	}
-	
+    public void setCodigoCurso(int codigoCurso) {
+        this.codigoCurso = codigoCurso;
+    }
 }
-
-

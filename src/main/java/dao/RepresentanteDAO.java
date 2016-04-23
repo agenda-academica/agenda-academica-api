@@ -8,19 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.TurmaModel;
+import model.RepresentanteModel;
 
 /**
  * @author Sergio Eduardo Bertolazo
  */
-public class TurmaDAO {
-    //List<TurmaModel> list = new ArrayList<TurmaModel>();
-    public TurmaDAO() {}
+public class RepresentanteDAO {
+    public RepresentanteDAO() {}
 
-    public List<TurmaModel> findAll() {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
+    public List<RepresentanteModel> findAll() {
+        List<RepresentanteModel> list = new ArrayList<RepresentanteModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma ORDER BY nome";
+        String sql = "SELECT * FROM representante ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -32,15 +31,15 @@ public class TurmaDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+          ConnectionHelper.close(c);
         }
         return list;
     }
 
-    public List<TurmaModel> findByName(String nome) {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
+    public List<RepresentanteModel> findByName(String nome) {
+        List<RepresentanteModel> list = new ArrayList<RepresentanteModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma as e " +
+        String sql = "SELECT * FROM representante as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -55,14 +54,14 @@ public class TurmaDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+          ConnectionHelper.close(c);
         }
         return list;
     }
 
-    public TurmaModel findById(int id) {
-        String sql = "SELECT * FROM turma WHERE codigo = ?";
-        TurmaModel turma = null;
+    public RepresentanteModel findById(int id) {
+        String sql = "SELECT * FROM representante WHERE codigo = ?";
+        RepresentanteModel representante = null;
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -70,54 +69,58 @@ public class TurmaDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                turma = processRow(rs);
+                representante = processRow(rs);
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+          ConnectionHelper.close(c);
         }
-        return turma;
+        return representante;
     }
 
-    public List<TurmaModel> findByFatherId(int id) {
-        List<TurmaModel> list = new ArrayList<TurmaModel>();
-        String sql = "SELECT * FROM turma WHERE codigoCurso = ?";
+    /*
+    public List<RepresentanteModel> findByFatherId(int id) {
+        List<RepresentanteModel> list = new ArrayList<RepresentanteModel>();
+        String sql = "SELECT * FROM representante WHERE codigoPai = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 list.add(processRow(rs));
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+          ConnectionHelper.close(c);
         }
         return list;
     }
+    */
 
-    public TurmaModel save(TurmaModel turma)
+    public RepresentanteModel save(RepresentanteModel representante)
     {
-        return turma.getCodigo() > 0 ? update(turma) : create(turma);
+        return representante.getCodigo() > 0 ? update(representante) : create(representante);
     }
 
-    public TurmaModel create(TurmaModel turma) {
+    public RepresentanteModel create(RepresentanteModel representante) {
         Connection c = null;
         PreparedStatement ps = null;
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO turma (nome, codigoCurso) VALUES (?, ?)",
+                "INSERT INTO representante (nome, email, codigoTurma) VALUES (?, ?, ?)",
                 new String[] { "ID" }
             );
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
+
+            ps.setString(1, representante.getNome());
+            ps.setString(2, representante.getEmail());
+            ps.setInt(3, representante.getCodigoTurma());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -125,39 +128,41 @@ public class TurmaDAO {
 
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            turma.setCodigo(id);
+            representante.setCodigo(id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionHelper.close(c);
+          ConnectionHelper.close(c);
         }
-        return turma;
+        return representante;
     }
 
-    public TurmaModel update(TurmaModel turma) {
+    public RepresentanteModel update(RepresentanteModel representante) {
         Connection c = null;
-        try {
-            c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE turma SET nome=?, codigoCurso=? WHERE codigo=?");
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
-            ps.setInt(3, turma.getCodigo());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
+          try {
+              c = ConnectionHelper.getConnection();
+              PreparedStatement ps = c.prepareStatement("UPDATE representante SET nome=?, email=?, codigoTurma=? WHERE codigo=?");
+              ps.setString(1, representante.getNome());
+              ps.setString(2, representante.getEmail());
+              ps.setInt(3, representante.getCodigoTurma());
+              ps.setInt(4, representante.getCodigo());
+
+              ps.executeUpdate();
+          } catch (SQLException e) {
+              e.printStackTrace();
+              throw new RuntimeException(e);
+          } finally {
             ConnectionHelper.close(c);
-        }
-        return turma;
+          }
+          return representante;
     }
 
     public boolean remove(int id) {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM turma WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM representante WHERE codigo=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
             return count == 1;
@@ -169,17 +174,12 @@ public class TurmaDAO {
         }
     }
 
-    protected TurmaModel processRow(ResultSet rs) throws SQLException {
-        TurmaModel turma = new TurmaModel();
-        turma.setCodigo(rs.getInt("codigo"));
-        turma.setNome(rs.getString("nome"));
-        turma.setCodigoCurso(rs.getInt("codigoCurso"));
-        /*
-        turma.setListaDeAlunos(listaDeAlunos);
-        turma.setListaDeMateria(listaDeMateria);
-        turma.setListaDeRepresentantes(listaDeRepresentantes);
-        */
-        return turma;
+    protected RepresentanteModel processRow(ResultSet rs) throws SQLException {
+        RepresentanteModel representante = new RepresentanteModel();
+        representante.setCodigo(rs.getInt("codigo"));
+        representante.setNome(rs.getString("nome"));
+        representante.setEmail(rs.getString("email"));
+        return representante;
     }
 
 }
