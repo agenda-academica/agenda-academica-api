@@ -66,7 +66,6 @@ function newturma() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -76,7 +75,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -86,14 +84,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentturma = data;
 			renderDetails(currentturma);
 		}
@@ -101,7 +97,6 @@ function findById(id) {
 }
 
 function findByChildrenIdAlunos(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdAlunos/' + searchKey,
@@ -111,7 +106,6 @@ function findByChildrenIdAlunos(searchKey) {
 }
 
 function findByChildrenIdAlunosRepresentantes(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdAlunosRepresentantes/' + searchKey,
@@ -121,7 +115,6 @@ function findByChildrenIdAlunosRepresentantes(searchKey) {
 }
 
 function findByChildrenIdMaterias(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdMaterias/' + searchKey,
@@ -131,7 +124,6 @@ function findByChildrenIdMaterias(searchKey) {
 }
 
 function addturma() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -150,7 +142,6 @@ function addturma() {
 }
 
 function updateturma() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -167,7 +158,6 @@ function updateturma() {
 }
 
 function deleteturma() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#turmaId').val(),
@@ -210,10 +200,8 @@ function renderDetails(turma) {
 }
 //alunos
 function renderListaDeAlunos(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeAlunos li').remove();
 	$.each(list, function(index, usuario) {
@@ -227,7 +215,6 @@ function renderListaDeAlunosRepresentantes(data){
 
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeAlunosRepresentantes li').remove();
 	$.each(list, function(index, usuario) {
@@ -241,14 +228,12 @@ function renderListaDeMaterias(data){
 
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeMaterias li').remove();
 	$.each(list, function(index, materia) {
 		$('#listaDeMaterias').append('<li><a href="#" data-identity="' + materia.codigo + '">'+materia.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 // Helper function to serialize all the form fields into a JSON string

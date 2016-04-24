@@ -69,7 +69,6 @@ function newanoLetivo() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -79,7 +78,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -89,14 +87,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentanoLetivo = data;
 			renderDetails(currentanoLetivo);
 		}
@@ -104,7 +100,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -114,7 +109,6 @@ function findByChildrenId(searchKey) {
 }
 
 function addanoLetivo() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -133,7 +127,6 @@ function addanoLetivo() {
 }
 
 function updateanoLetivo() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -173,17 +166,14 @@ function renderList(data) {
 }
 
 function renderDetails(anoLetivo) {
-
  	$('#anoLetivoId').val(anoLetivo.codigo);
 	$('#anoLetivo').val(anoLetivo.anoLetivo);
 	$('#codigoInstituicaoDeEnsino').val(anoLetivo.codigoInstituicaoDeEnsino);
 	$('#descricao').val(anoLetivo.descricao);
-
 	findByChildrenId(anoLetivo.codigo);
 }
 
 function renderListaCurso(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
@@ -193,7 +183,6 @@ function renderListaCurso(data){
 		$('#listaDeCursos').append('<li><a href="#" data-identity="' + curso.codigo + '">'+curso.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 // Helper function to serialize all the form fields into a JSON string

@@ -66,7 +66,6 @@ function newprova() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -76,7 +75,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -100,7 +98,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -110,7 +107,6 @@ function findByChildrenId(searchKey) {
 }
 
 function addprova() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -146,7 +142,6 @@ function updateprova() {
 }
 
 function deleteprova() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#provaId').val(),
@@ -166,6 +161,7 @@ function renderList(data) {
 
 	$('#provaList li').remove();
 	$.each(list, function(index, prova) {
+<<<<<<< HEAD
 		$('#provaList').append('<li><a href="#" data-identity="' + prova.codigo + '">'+prova.descricao+'</a></li>');
 	});
 }*/
@@ -181,13 +177,10 @@ function renderDetails(prova) {
 	$('#description').val(prova.description);*/
 
 	findByChildrenId(prova.codigo);
-
 }
 
 function renderlistaDeAnexos(data){
-
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeAnexos li').remove();
 	$.each(list, function(index, anexo) {

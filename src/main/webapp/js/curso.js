@@ -69,7 +69,6 @@ function newcurso() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -79,7 +78,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -89,14 +87,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentcurso = data;
 			renderDetails(currentcurso);
 		}
@@ -104,7 +100,6 @@ function findById(id) {
 }
 
 function findByChildrenIdMaterias(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdMaterias/' + searchKey,
@@ -115,7 +110,6 @@ function findByChildrenIdMaterias(searchKey) {
 
 
 function findByChildrenIdTurmas(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdTurmas/' + searchKey,
@@ -126,7 +120,6 @@ function findByChildrenIdTurmas(searchKey) {
 
 
 function addcurso() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -145,7 +138,6 @@ function addcurso() {
 }
 
 function updatecurso() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -162,7 +154,6 @@ function updatecurso() {
 }
 
 function deletecurso() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#cursoId').val(),
@@ -200,24 +191,18 @@ function renderDetails(curso) {
 	findByChildrenIdMaterias(curso.codigo);
 }
 
-
-
 function renderListaDeMaterias(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeMaterias li').remove();
 	$.each(list, function(index, materia) {
 		$('#listaDeMaterias').append('<li><a href="#" data-identity="' + materia.codigo + '">'+materia.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 function renderListaDeTurmas(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
@@ -227,7 +212,6 @@ function renderListaDeTurmas(data){
 		$('#listaDeTurmas').append('<li><a href="#" data-identity="' + turma.codigo + '">'+turma.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 // Helper function to serialize all the form fields into a JSON string

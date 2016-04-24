@@ -69,7 +69,6 @@ function newinstituicao() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -79,7 +78,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -89,14 +87,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentinstituicao = data;
 			renderDetails(currentinstituicao);
 		}
@@ -104,7 +100,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -115,7 +110,6 @@ function findByChildrenId(searchKey) {
 
 
 function addinstituicao() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -134,7 +128,6 @@ function addinstituicao() {
 }
 
 function updateinstituicao() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -151,7 +144,6 @@ function updateinstituicao() {
 }
 
 function deleteinstituicao() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#instituicaoId').val(),
@@ -175,7 +167,6 @@ function renderList(data) {
 }
 
 function renderDetails(instituicao) {
-
  	$('#instituicaoId').val(instituicao.codigo);
 	$('#nome').val(instituicao.nome);
 	$('#codigoUsuario').val(instituicao.codigoUsuario);
@@ -183,7 +174,6 @@ function renderDetails(instituicao) {
 	$('#site').val(instituicao.site);
 	$('#descricao').val(instituicao.descricao);
 	$('#telefone').val(instituicao.telefone);
-
 	$('#unidade').val(instituicao.unidade);
 
 	if(instituicao.isProfessor == true){
@@ -198,24 +188,20 @@ function renderDetails(instituicao) {
 }
 
 function renderListAnosLetivos(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#listaDeAnosLetivos li').remove();
 	$.each(list, function(index, ano) {
 		$('#listaDeAnosLetivos').append('<li><a href="#" data-identity="' + ano.codigo + '">'+ano.anoLetivo+'</a></li>');
 	});
 	//fim teste
-
 }
 
 
 // Helper function to serialize all the form fields into a JSON string
 function formToJSON() {
 	var instituicaoId = $('#instituicaoId').val();
-
 	var isProfessor = false;
 
 	if ($('#isProfessor').val() == 1){
@@ -233,7 +219,6 @@ function formToJSON() {
 		"site": $('#site').val(),
 		"descricao": $('#descricao').val(),
 		"telefone": $('#telefone').val(),
-
 		"unidade": $('#unidade').val(),
 		"isProfessor": isProfessor
 		});

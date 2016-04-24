@@ -71,7 +71,6 @@ function newUsuario() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -81,7 +80,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -91,14 +89,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentUsuario = data;
 			renderDetails(currentUsuario);
 		}
@@ -106,7 +102,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -117,7 +112,6 @@ function findByChildrenId(searchKey) {
 
 
 function addUsuario() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -136,7 +130,6 @@ function addUsuario() {
 }
 
 function updateUsuario() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -153,7 +146,6 @@ function updateUsuario() {
 }
 
 function deleteUsuario() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#usuarioId').val(),
@@ -167,7 +159,6 @@ function deleteUsuario() {
 }
 
 function renderList(data) {
-	console.log(data);
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
@@ -187,22 +178,18 @@ function renderDetails(usuario) {
 /*	$('#year').val(usuario.year);
 	$('#pic').attr('src', 'pics/' + usuario.picture);
 	$('#description').val(usuario.description);*/
-
 	findByChildrenId(usuario.codigo);
 }
 
 function renderListInstituicao(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
 	//teste
 	$('#instituicoesList li').remove();
 	$.each(list, function(index, usuario) {
 		$('#instituicoesList').append('<li><a href="#" data-identity="' + usuario.codigo + '">'+usuario.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 // Helper function to serialize all the form fields into a JSON string

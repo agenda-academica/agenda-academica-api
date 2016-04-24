@@ -66,7 +66,6 @@ function newaula() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -76,7 +75,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -86,14 +84,12 @@ function findByName(searchKey) {
 }
 
 function findById(id) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/' + id,
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
-
 			currentaula = data;
 			renderDetails(currentaula);
 		}
@@ -101,7 +97,6 @@ function findById(id) {
 }
 
 function findByChildrenIdTrabalho(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdTrabalho/' + searchKey,
@@ -111,7 +106,6 @@ function findByChildrenIdTrabalho(searchKey) {
 }
 
 function findByChildrenIdProva(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdProva/' + searchKey,
@@ -121,7 +115,6 @@ function findByChildrenIdProva(searchKey) {
 }
 
 function findByChildrenIdConteudo(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenIdConteudo/' + searchKey,
@@ -131,7 +124,6 @@ function findByChildrenIdConteudo(searchKey) {
 }
 
 function addaula() {
-
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
@@ -150,7 +142,6 @@ function addaula() {
 }
 
 function updateaula() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -167,7 +158,6 @@ function updateaula() {
 }
 
 function deleteaula() {
-
 	$.ajax({
 		type: 'DELETE',
 		url: rootURL + '/' + $('#aulaId').val(),
@@ -196,7 +186,6 @@ function renderDetails(aula) {
 	$('#data').val(aula.data);
 	$('#codigoMateria').val(aula.codigoMateria);
 
-
 	//lista alunos
 	findByChildrenIdTrabalho(aula.codigo);
 
@@ -209,7 +198,6 @@ function renderDetails(aula) {
 
 //trabalho
 function renderListaDeTrabalho(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
@@ -247,7 +235,6 @@ function renderListaDeConteudo(data){
 		$('#listaDeConteudo').append('<li><a href="#" data-identity="' + conteudo.codigo + '">'+conteudo.nome+'</a></li>');
 	});
 	//fim teste
-
 }
 
 // Helper function to serialize all the form fields into a JSON string

@@ -28,4 +28,8 @@
   - `Goals`: **heroku:deploy-war**
 
 # Enjoy!
-RESTful URL: http://127.0.0.1:8080/agenda-academica-api/rest/****
+- HTML URL: http://127.0.0.1:8080/agenda-academica-api/
+- RESTful URL: http://127.0.0.1:8080/agenda-academica-api/rest/*
+
+# Live Demo
+https://infinite-wave-42974.herokuapp.com/

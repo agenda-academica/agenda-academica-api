@@ -101,7 +101,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -177,11 +176,9 @@ function renderDetails(conteudo) {
 	$('#codigoAula').val(conteudo.codigoAula);
 
 	findByChildrenId(conteudo.codigo);
-
 }
 
 function renderlistaDeAnexos(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 

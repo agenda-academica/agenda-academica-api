@@ -66,7 +66,6 @@ function newtrabalho() {
 }
 
 function findAll() {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
@@ -76,7 +75,6 @@ function findAll() {
 }
 
 function findByName(searchKey) {
-
 	$.ajax({
 		type: 'GET',
 		url: rootURL + '/search/' + searchKey,
@@ -100,7 +98,6 @@ function findById(id) {
 }
 
 function findByChildrenId(searchKey) {
-
     $.ajax({
           type: 'GET',
           url: rootURL + '/findByChildrenId/' + searchKey,
@@ -129,7 +126,6 @@ function addtrabalho() {
 }
 
 function updatetrabalho() {
-
 	$.ajax({
 		type: 'PUT',
 		contentType: 'application/json',
@@ -174,12 +170,10 @@ function renderDetails(trabalho) {
 	$('#descricao').val(trabalho.descricao);
 	$('#dataDeEntrega').val(trabalho.dataDeEntrega);
 	$('#codigoAula').val(trabalho.codigoAula);
-
 	findByChildrenId(trabalho.codigo);
 }
 
 function renderlistaDeAnexos(data){
-
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
