@@ -19,7 +19,7 @@ public class UsuarioDAO {
     public List<UsuarioModel> findAll() {
         List<UsuarioModel> list = new ArrayList<UsuarioModel>();
         Connection c = null;
-        String sql = "SELECT * FROM usuario ORDER BY nome";
+        String sql = "SELECT * FROM Usuario ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -39,7 +39,7 @@ public class UsuarioDAO {
     public List<UsuarioModel> findByName(String nome) {
         List<UsuarioModel> list = new ArrayList<UsuarioModel>();
         Connection c = null;
-        String sql = "SELECT * FROM usuario as e " +
+        String sql = "SELECT * FROM Usuario as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -60,7 +60,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioModel findById(int id) {
-        String sql = "SELECT * FROM usuario WHERE codigo = ?";
+        String sql = "SELECT * FROM Usuario WHERE codigo = ?";
         UsuarioModel usuario = null;
         Connection c = null;
         try {
@@ -83,7 +83,7 @@ public class UsuarioDAO {
     /*
     public List<UsuarioModel> findByFatherId(int id) {
         List<UsuarioModel> list = new ArrayList<UsuarioModel>();
-        String sql = "SELECT * FROM usuario WHERE codigoPai = ?";
+        String sql = "SELECT * FROM Usuario WHERE codigoPai = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -167,7 +167,7 @@ public class UsuarioDAO {
           Connection c = null;
           try {
               c = ConnectionHelper.getConnection();
-              PreparedStatement ps = c.prepareStatement("DELETE FROM usuario WHERE codigo=?");
+              PreparedStatement ps = c.prepareStatement("DELETE FROM Usuario WHERE codigo=?");
               ps.setInt(1, id);
               int count = ps.executeUpdate();
               return count == 1;
