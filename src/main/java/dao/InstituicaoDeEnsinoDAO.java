@@ -80,6 +80,27 @@ public class InstituicaoDeEnsinoDAO {
         return instituicao;
     }
 
+    public List<InstituicaoDeEnsinoModel> findByUsuarioId(int id) {
+        List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
+        String sql = "SELECT * FROM InstituicaoDeEnsino WHERE codigoUsuario = ?";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(processRow(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
     public List<InstituicaoDeEnsinoModel> findByFatherId(int id) {
         List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
         String sql = "SELECT * FROM InstituicaoDeEnsino WHERE codigoUsuario = ?";
@@ -112,12 +133,15 @@ public class InstituicaoDeEnsinoDAO {
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO InstituicaoDeEnsino (nome, codigoUsuario) VALUES (?, ?)",
+                "INSERT INTO InstituicaoDeEnsino (codigoUsuario, nome, abreviacao, site, logo) VALUES (?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
-
-            ps.setString(1, instituicao.getNome());
-            ps.setInt(2, instituicao.getCodigoUsuario());
+            
+            ps.setInt(1, instituicao.getCodigoUsuario());
+            ps.setString(2, instituicao.getNome());
+            ps.setString(3, instituicao.getAbreviacao());
+            ps.setString(4, instituicao.getSite());
+            ps.setString(5, instituicao.getLogo());
             // instituicao.setListaDeAnosLetivos(listaDeAnosLetivos);
             // ps.setInt(9, instituicao.getCodigo());
             ps.executeUpdate();
@@ -139,14 +163,28 @@ public class InstituicaoDeEnsinoDAO {
 
     public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel instituicao) {
         Connection c = null;
+
+        String query = String.format(
+              " UPDATE InstituicaoDeEnsino"
+	        + " SET"
+	        + "   codigoUsuario=%d,"
+	        + "   nome='%s',"
+	        + "   abreviacao='%s',"
+	        + "   site='%s',"
+	        + "   logo='%s'"
+	        + " WHERE codigo=%d",
+            instituicao.getCodigoUsuario(),
+            instituicao.getNome(),
+            instituicao.getAbreviacao(),
+            instituicao.getSite(),
+            instituicao.getLogo(),
+            instituicao.getCodigo()
+        );
+        System.out.println(query);
+        
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE InstituicaoDeEnsino SET nome=?, codigoUsuario=? WHERE codigo=?");
-            ps.setString(1, instituicao.getNome());
-            ps.setInt(2, instituicao.getCodigoUsuario());
-
-            // instituicao.setListaDeAnosLetivos(listaDeAnosLetivos);
-            ps.setInt(3, instituicao.getCodigo());
+            PreparedStatement ps = c.prepareStatement(query);
             ps.executeUpdate();
           } catch (SQLException e) {
               e.printStackTrace();
@@ -157,15 +195,18 @@ public class InstituicaoDeEnsinoDAO {
         return instituicao;
     }
 
-    public boolean remove(int id) {
+    public InstituicaoDeEnsinoModel remove(int id) {
         Connection c = null;
+        InstituicaoDeEnsinoModel instituicao = new InstituicaoDeEnsinoModel();
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement("DELETE FROM InstituicaoDeEnsino WHERE codigo=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
-            return count == 1;
+            instituicao.setRequestStatus(count == 1);
+            return instituicao;
           } catch (Exception e) {
+            instituicao.setRequestStatus(false);
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
@@ -177,8 +218,11 @@ public class InstituicaoDeEnsinoDAO {
         InstituicaoDeEnsinoModel instituicao = new InstituicaoDeEnsinoModel();
 
         instituicao.setCodigo(rs.getInt("codigo"));
-        instituicao.setNome(rs.getString("nome"));
         instituicao.setCodigoUsuario(rs.getInt("codigoUsuario"));
+        instituicao.setNome(rs.getString("nome"));
+        instituicao.setAbreviacao(rs.getString("abreviacao"));
+        instituicao.setSite(rs.getString("site"));
+        instituicao.setLogo(rs.getString("logo"));
         // instituicao.setListaDeAnosLetivos(listaDeAnosLetivos);
         return instituicao;
     }

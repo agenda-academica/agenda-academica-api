@@ -40,6 +40,12 @@ public class InstituicaoDeEnsinoResources {
         return dao.findById(Integer.parseInt(codigo));
     }
 
+    @GET @Path("usuario/{id}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<InstituicaoDeEnsinoModel> findByUsuarioId(@PathParam("id") String codigoUsuario) {
+        return dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
+    }
+
     @GET @Path("findByChildrenId/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<UnidadeModel> findByChildrenId(@PathParam("query") int query) {
@@ -64,8 +70,8 @@ public class InstituicaoDeEnsinoResources {
 
     @DELETE @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void remove(@PathParam("id") int id) {
-        dao.remove(id);
+    public InstituicaoDeEnsinoModel remove(@PathParam("id") int id) {
+        return dao.remove(id);
     }
 
 }

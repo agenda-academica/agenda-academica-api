@@ -114,7 +114,7 @@ public class UsuarioDAO {
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO usuario (nome, celular, email, senha, login) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO Usuario (nome, celular, email, senha, login) VALUES (?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
             ps.setString(1, usuario.getNome());
@@ -145,7 +145,7 @@ public class UsuarioDAO {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE usuario SET nome=?, celular=?, email=?, senha=?, login=? WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("UPDATE Usuario SET nome=?, celular=?, email=?, senha=?, login=? WHERE codigo=?");
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getCelular());
             ps.setString(3, usuario.getEmail());
