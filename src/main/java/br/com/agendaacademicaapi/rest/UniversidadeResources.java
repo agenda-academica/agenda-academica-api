@@ -11,39 +11,51 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import dao.InstituicaoDeEnsinoDAO;
+import com.google.gson.Gson;
+
+import dao.UniversidadeDAO;
 import dao.UnidadeDAO;
-import model.InstituicaoDeEnsinoModel;
+import model.UniversidadeModel;
 import model.UnidadeModel;
 
-@Path("/instituicao")
-public class InstituicaoDeEnsinoResources {
+@Path("/universidade")
+public class UniversidadeResources {
 
-    InstituicaoDeEnsinoDAO dao = new InstituicaoDeEnsinoDAO();
+	UniversidadeDAO dao = new UniversidadeDAO();
+    Gson gson = new Gson();
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findAll() {
-        return dao.findAll();
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response findAll() {
+    	List<UniversidadeModel> list = dao.findAll();
+        if (list.size() < 1) {
+            return Response.status(Response.Status.OK).entity("{\"responseStatus\": \"true\"}").build();
+        }
+        return Response.ok(gson.toJson(list), MediaType.APPLICATION_JSON).build();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByName(@PathParam("query") String query) {
+    public List<UniversidadeModel> findByName(@PathParam("query") String query) {
         return dao.findByName(query);
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel findById(@PathParam("id") String codigo) {
+    public UniversidadeModel findById(@PathParam("id") String codigo) {
         return dao.findById(Integer.parseInt(codigo));
     }
 
     @GET @Path("usuario/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByUsuarioId(@PathParam("id") String codigoUsuario) {
-        return dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
+    public Response findByUsuarioId(@PathParam("id") String codigoUsuario) {
+    	List<UniversidadeModel> list = dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
+        if (list.size() < 1) {
+            return Response.status(Response.Status.OK).entity("{\"responseStatus\": \"true\"}").build();
+        }
+        return Response.ok(gson.toJson(list), MediaType.APPLICATION_JSON).build();
     }
 
     @GET @Path("findByChildrenId/{query}")
@@ -56,21 +68,21 @@ public class InstituicaoDeEnsinoResources {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel Instituicao) {
-        return dao.create(Instituicao);
+    public UniversidadeModel create(UniversidadeModel universidade) {
+        return dao.create(universidade);
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel Instituicao) {
-        dao.update(Instituicao);
-        return Instituicao;
+    public UniversidadeModel update(UniversidadeModel universidade) {
+        dao.update(universidade);
+        return universidade;
     }
 
     @DELETE @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public InstituicaoDeEnsinoModel remove(@PathParam("id") int id) {
+    public UniversidadeModel remove(@PathParam("id") int id) {
         return dao.remove(id);
     }
 

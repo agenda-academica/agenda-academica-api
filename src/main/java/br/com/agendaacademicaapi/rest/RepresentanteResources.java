@@ -12,9 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.InstituicaoDeEnsinoDAO;
+import dao.UniversidadeDAO;
 import dao.RepresentanteDAO;
-import model.InstituicaoDeEnsinoModel;
+import model.UniversidadeModel;
 import model.RepresentanteModel;
 
 @Path("/representante")
@@ -42,9 +42,9 @@ public class RepresentanteResources {
 
     @GET @Path("findByChildrenId/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<InstituicaoDeEnsinoModel> findByChildrenId(@PathParam("query") int query) {
-        InstituicaoDeEnsinoDAO instituicaoDAO = new InstituicaoDeEnsinoDAO();
-        return instituicaoDAO.findByFatherId(query);
+    public List<UniversidadeModel> findByChildrenId(@PathParam("query") int query) {
+    	UniversidadeDAO universidadeDAO = new UniversidadeDAO();
+        return universidadeDAO.findByFatherId(query);
     }
 
     /*

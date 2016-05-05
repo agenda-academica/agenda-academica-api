@@ -2,11 +2,11 @@
  *
  */
 // The root URL for the RESTful services
-var rootURL = "http://localhost:8080/agenda-academica-api/rest/instituicao";
+var rootURL = "http://localhost:8080/agenda-academica-api/rest/universidade";
 
 var currentinstituicao;
 
-// Retrieve instituicao list when application starts
+// Retrieve universidade list when application starts
 findAll();
 
 // Nothing to delete in initial application state
@@ -49,7 +49,7 @@ $('#instituicaoList a').live('click', function() {
 	findById($(this).data('identity'));
 });
 
-// Replace broken images with generic instituicao bottle
+// Replace broken images with generic universidade bottle
 $("img").error(function(){
   $(this).attr("src", "pics/generic.jpg");
 
@@ -117,7 +117,7 @@ function addinstituicao() {
 		dataType: "json",
 		data: formToJSON(),
 		success: function(data, textStatus, jqXHR){
-			alert('instituicao created successfully');
+			alert('universidade created successfully');
 			$('#btnDelete').show();
 			$('#instituicaoId').val(data.codigo);
 		},
@@ -135,7 +135,7 @@ function updateinstituicao() {
 		dataType: "json",
 		data: formToJSON(),
 		success: function(data, textStatus, jqXHR){
-			alert('instituicao updated successfully');
+			alert('universidade updated successfully');
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			alert('updateinstituicao error: ' + textStatus);
@@ -148,7 +148,7 @@ function deleteinstituicao() {
 		type: 'DELETE',
 		url: rootURL + '/' + $('#instituicaoId').val(),
 		success: function(data, textStatus, jqXHR){
-			alert('instituicao deleted successfully');
+			alert('universidade deleted successfully');
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			alert('deleteinstituicao error');
@@ -161,29 +161,29 @@ function renderList(data) {
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
 	$('#instituicaoList li').remove();
-	$.each(list, function(index, instituicao) {
-		$('#instituicaoList').append('<li><a href="#" data-identity="' + instituicao.codigo + '">'+instituicao.nome+'</a></li>');
+	$.each(list, function(index, universidade) {
+		$('#instituicaoList').append('<li><a href="#" data-identity="' + universidade.codigo + '">'+universidade.nome+'</a></li>');
 	});
 }
 
-function renderDetails(instituicao) {
- 	$('#instituicaoId').val(instituicao.codigo);
-	$('#nome').val(instituicao.nome);
-	$('#codigoUsuario').val(instituicao.codigoUsuario);
-	$('#email').val(instituicao.email);
-	$('#site').val(instituicao.site);
-	$('#descricao').val(instituicao.descricao);
-	$('#telefone').val(instituicao.telefone);
-	$('#unidade').val(instituicao.unidade);
+function renderDetails(universidade) {
+ 	$('#instituicaoId').val(universidade.codigo);
+	$('#nome').val(universidade.nome);
+	$('#codigoUsuario').val(universidade.codigoUsuario);
+	$('#email').val(universidade.email);
+	$('#site').val(universidade.site);
+	$('#descricao').val(universidade.descricao);
+	$('#telefone').val(universidade.telefone);
+	$('#unidade').val(universidade.unidade);
 
-	if(instituicao.isProfessor == true){
+	if(universidade.isProfessor == true){
 		$('#isProfessor').val(1);
 	}
 		else{
 			$('#isProfessor').val(2);
 		}
 
-	findByChildrenId(instituicao.codigo);
+	findByChildrenId(universidade.codigo);
 
 }
 

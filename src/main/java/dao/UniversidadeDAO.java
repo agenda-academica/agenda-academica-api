@@ -8,18 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.InstituicaoDeEnsinoModel;
+import model.UniversidadeModel;
 
 /**
  * @author Sergio Eduardo Bertolazo
  */
-public class InstituicaoDeEnsinoDAO {
-    public InstituicaoDeEnsinoDAO() {}
+public class UniversidadeDAO {
+    public UniversidadeDAO() {}
 
-    public List<InstituicaoDeEnsinoModel> findAll() {
-        List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
+    public List<UniversidadeModel> findAll() {
+        List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM InstituicaoDeEnsino ORDER BY nome";
+        String sql = "SELECT * FROM Universidade ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -36,10 +36,10 @@ public class InstituicaoDeEnsinoDAO {
         return list;
     }
 
-    public List<InstituicaoDeEnsinoModel> findByName(String nome) {
-        List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
+    public List<UniversidadeModel> findByName(String nome) {
+        List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM InstituicaoDeEnsino as e " +
+        String sql = "SELECT * FROM Universidade as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -59,9 +59,9 @@ public class InstituicaoDeEnsinoDAO {
         return list;
     }
 
-    public InstituicaoDeEnsinoModel findById(int id) {
-        String sql = "SELECT * FROM InstituicaoDeEnsino WHERE codigo = ?";
-        InstituicaoDeEnsinoModel instituicao = null;
+    public UniversidadeModel findById(int id) {
+        String sql = "SELECT * FROM Universidade WHERE codigo = ?";
+        UniversidadeModel universidade = null;
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -69,7 +69,7 @@ public class InstituicaoDeEnsinoDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                instituicao = processRow(rs);
+                universidade = processRow(rs);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,12 +77,12 @@ public class InstituicaoDeEnsinoDAO {
         } finally {
             ConnectionHelper.close(c);
         }
-        return instituicao;
+        return universidade;
     }
 
-    public List<InstituicaoDeEnsinoModel> findByUsuarioId(int id) {
-        List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
-        String sql = "SELECT * FROM InstituicaoDeEnsino WHERE codigoUsuario = ?";
+    public List<UniversidadeModel> findByUsuarioId(int id) {
+        List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
+        String sql = "SELECT * FROM Universidade WHERE codigoUsuario = ? ORDER BY abreviacao";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -101,9 +101,9 @@ public class InstituicaoDeEnsinoDAO {
         return list;
     }
 
-    public List<InstituicaoDeEnsinoModel> findByFatherId(int id) {
-        List<InstituicaoDeEnsinoModel> list = new ArrayList<InstituicaoDeEnsinoModel>();
-        String sql = "SELECT * FROM InstituicaoDeEnsino WHERE codigoUsuario = ?";
+    public List<UniversidadeModel> findByFatherId(int id) {
+        List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
+        String sql = "SELECT * FROM Universidade WHERE codigoUsuario = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -122,28 +122,28 @@ public class InstituicaoDeEnsinoDAO {
         return list;
     }
 
-    public InstituicaoDeEnsinoModel save(InstituicaoDeEnsinoModel instituicao)
+    public UniversidadeModel save(UniversidadeModel universidade)
     {
-        return instituicao.getCodigo() > 0 ? update(instituicao) : create(instituicao);
+        return universidade.getCodigo() > 0 ? update(universidade) : create(universidade);
     }
 
-    public InstituicaoDeEnsinoModel create(InstituicaoDeEnsinoModel instituicao) {
+    public UniversidadeModel create(UniversidadeModel universidade) {
         Connection c = null;
         PreparedStatement ps = null;
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO InstituicaoDeEnsino (codigoUsuario, nome, abreviacao, site, logo) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO Universidade (codigoUsuario, nome, abreviacao, site, logo) VALUES (?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
-            
-            ps.setInt(1, instituicao.getCodigoUsuario());
-            ps.setString(2, instituicao.getNome());
-            ps.setString(3, instituicao.getAbreviacao());
-            ps.setString(4, instituicao.getSite());
-            ps.setString(5, instituicao.getLogo());
-            // instituicao.setListaDeAnosLetivos(listaDeAnosLetivos);
-            // ps.setInt(9, instituicao.getCodigo());
+
+            ps.setInt(1, universidade.getCodigoUsuario());
+            ps.setString(2, universidade.getNome());
+            ps.setString(3, universidade.getAbreviacao());
+            ps.setString(4, universidade.getSite());
+            ps.setString(5, universidade.getLogo());
+            // universidade.setListaDeAnosLetivos(listaDeAnosLetivos);
+            // ps.setInt(9, universidade.getCodigo());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -151,21 +151,21 @@ public class InstituicaoDeEnsinoDAO {
 
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            instituicao.setCodigo(id);
+            universidade.setCodigo(id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
-        return instituicao;
+        return universidade;
     }
 
-    public InstituicaoDeEnsinoModel update(InstituicaoDeEnsinoModel instituicao) {
+    public UniversidadeModel update(UniversidadeModel universidade) {
         Connection c = null;
 
         String query = String.format(
-              " UPDATE InstituicaoDeEnsino"
+              " UPDATE Universidade"
 	        + " SET"
 	        + "   codigoUsuario=%d,"
 	        + "   nome='%s',"
@@ -173,15 +173,15 @@ public class InstituicaoDeEnsinoDAO {
 	        + "   site='%s',"
 	        + "   logo='%s'"
 	        + " WHERE codigo=%d",
-            instituicao.getCodigoUsuario(),
-            instituicao.getNome(),
-            instituicao.getAbreviacao(),
-            instituicao.getSite(),
-            instituicao.getLogo(),
-            instituicao.getCodigo()
+            universidade.getCodigoUsuario(),
+            universidade.getNome(),
+            universidade.getAbreviacao(),
+            universidade.getSite(),
+            universidade.getLogo(),
+            universidade.getCodigo()
         );
         System.out.println(query);
-        
+
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(query);
@@ -192,21 +192,21 @@ public class InstituicaoDeEnsinoDAO {
         } finally {
             ConnectionHelper.close(c);
         }
-        return instituicao;
+        return universidade;
     }
 
-    public InstituicaoDeEnsinoModel remove(int id) {
+    public UniversidadeModel remove(int id) {
         Connection c = null;
-        InstituicaoDeEnsinoModel instituicao = new InstituicaoDeEnsinoModel();
+        UniversidadeModel universidade = new UniversidadeModel();
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM InstituicaoDeEnsino WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Universidade WHERE codigo=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
-            instituicao.setRequestStatus(count == 1);
-            return instituicao;
+            universidade.setRequestStatus(count == 1);
+            return universidade;
           } catch (Exception e) {
-            instituicao.setRequestStatus(false);
+            universidade.setRequestStatus(false);
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
@@ -214,17 +214,17 @@ public class InstituicaoDeEnsinoDAO {
         }
     }
 
-    protected InstituicaoDeEnsinoModel processRow(ResultSet rs) throws SQLException {
-        InstituicaoDeEnsinoModel instituicao = new InstituicaoDeEnsinoModel();
+    protected UniversidadeModel processRow(ResultSet rs) throws SQLException {
+    	UniversidadeModel universidade = new UniversidadeModel();
 
-        instituicao.setCodigo(rs.getInt("codigo"));
-        instituicao.setCodigoUsuario(rs.getInt("codigoUsuario"));
-        instituicao.setNome(rs.getString("nome"));
-        instituicao.setAbreviacao(rs.getString("abreviacao"));
-        instituicao.setSite(rs.getString("site"));
-        instituicao.setLogo(rs.getString("logo"));
-        // instituicao.setListaDeAnosLetivos(listaDeAnosLetivos);
-        return instituicao;
+        universidade.setCodigo(rs.getInt("codigo"));
+        universidade.setCodigoUsuario(rs.getInt("codigoUsuario"));
+        universidade.setNome(rs.getString("nome"));
+        universidade.setAbreviacao(rs.getString("abreviacao"));
+        universidade.setSite(rs.getString("site"));
+        universidade.setLogo(rs.getString("logo"));
+        // universidade.setListaDeAnosLetivos(listaDeAnosLetivos);
+        return universidade;
     }
 
 }

@@ -5,74 +5,92 @@ USE `sql5109263`;
 CREATE DATABASE `agenda-academica-api`;
 USE `agenda-academica-api`;
 
-CREATE TABLE IF NOT EXISTS `evento` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `codigoUsuario` INT NOT NULL,
-  `codigoDisciplina` INT,
-  `codigoTurma` INT,
-  `codigoCurso` INT,
-  `codigoUnidade` INT ,
-  `codigoUniversidade` INT NOT NULL,
-  `titulo` VARCHAR(45) ,
-  `descricao` TEXT ,
-  `dataInicioEvento` DATETIME ,
-  `dataFimEvento` DATETIME ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+-----
+-- Drops
+-----
+DROP TABLE `Curso`;
+DROP TABLE `Disciplina`;
+DROP TABLE `Evento`;
+DROP TABLE `Universidade`;
+DROP TABLE `Representante`;
+DROP TABLE `Turma`;
+DROP TABLE `Unidade`;
+DROP TABLE `Usuario`;
 
-CREATE TABLE IF NOT EXISTS `Unidade` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `codigoUniversidade` INT ,
-  `nome` VARCHAR(45) ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+-----
+-- Creates
+-----
+CREATE TABLE `Curso` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoUnidade` int(11) DEFAULT NULL,
+  `nome` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `Curso` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `codigoUnidade` INT ,
-  `nome` VARCHAR(45) ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Disciplina` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoTurma` int(11) DEFAULT NULL,
+  `nome` varchar(75) DEFAULT NULL,
+  `horarioInicio` datetime DEFAULT NULL,
+  `horarioFim` datetime DEFAULT NULL,
+  `diaDaSemana` varchar(25) DEFAULT NULL,
+  `sala` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `InstituicaoDeEnsino` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `codigoUsuario` INT ,
-  `nome` VARCHAR(45) ,
-   PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Evento` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoUsuario` int(11) NOT NULL,
+  `codigoDisciplina` int(11) DEFAULT NULL,
+  `codigoTurma` int(11) DEFAULT NULL,
+  `codigoCurso` int(11) DEFAULT NULL,
+  `codigoUnidade` int(11) DEFAULT NULL,
+  `codigoUniversidade` int(11) NOT NULL,
+  `titulo` varchar(45) DEFAULT NULL,
+  `descricao` text,
+  `dataInicioEvento` datetime DEFAULT NULL,
+  `dataFimEvento` datetime DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `Turma` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `codigoCurso` INT ,
-  `nome` VARCHAR(45) ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Universidade` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoUsuario` int(11) NOT NULL,
+  `nome` varchar(200) NOT NULL,
+  `abreviacao` varchar(45) DEFAULT NULL,
+  `site` varchar(100) DEFAULT NULL,
+  `logo` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `Usuario` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(75) ,
-  `login` VARCHAR(75) ,
-  `email` VARCHAR(50) ,
-  `celular` VARCHAR(20) ,
-  `senha` VARCHAR(128) , -- Crypt: SHA512
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Representante` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(75) DEFAULT NULL,
+  `codigoTurma` varchar(75) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `Disciplina` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(75) ,
-  `codigoTurma` INT,
-  `horarioInicio` DATETIME ,
-  `horarioFim` DATETIME ,
-  `diaDaSemana` VARCHAR(25) ,
-  `sala` VARCHAR(100) ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Turma` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoCurso` int(11) DEFAULT NULL,
+  `nome` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `Representante` (
-  `codigo` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(75) ,
-  `codigoTurma` VARCHAR(75) ,
-  `email` VARCHAR(50) ,
-  PRIMARY KEY (`codigo`))
-ENGINE = MyISAM;
+CREATE TABLE `Unidade` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `codigoUniversidade` int(11) DEFAULT NULL,
+  `nome` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Usuario` (
+  `codigo` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(75) DEFAULT NULL,
+  `login` varchar(75) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `celular` varchar(20) DEFAULT NULL,
+  `senha` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

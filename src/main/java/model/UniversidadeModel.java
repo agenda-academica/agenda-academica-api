@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Sergio Eduardo Bertolazo
  */
 @XmlRootElement
-public class InstituicaoDeEnsinoModel {
+public class UniversidadeModel {
     private int codigo;
     private int codigoUsuario;
     private String nome;
@@ -24,7 +24,7 @@ public class InstituicaoDeEnsinoModel {
     //CRIAR LISTA DE lista de unidades(SERA NESCESSARIO UM NOVO MODEL)
     //private ArrayList<AnoLetivoModel> listaDeAnosLetivos = new ArrayList<AnoLetivoModel>();
 
-    public InstituicaoDeEnsinoModel() {}
+    public UniversidadeModel() {}
 
     public int getCodigo() {
         return codigo;
