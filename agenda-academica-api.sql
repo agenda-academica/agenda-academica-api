@@ -79,10 +79,14 @@ CREATE TABLE `Turma` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Unidade` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoUniversidade` int(11) DEFAULT NULL,
-  `nome` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `idUniversidade` INT NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `endereco` TEXT NOT NULL,
+  `outrasInformacoes` TEXT NULL,
+  `unidadeSede` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Usuario` (

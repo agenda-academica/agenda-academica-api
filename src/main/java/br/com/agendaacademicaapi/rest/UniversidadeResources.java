@@ -68,8 +68,11 @@ public class UniversidadeResources {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public UniversidadeModel create(UniversidadeModel universidade) {
-        return dao.create(universidade);
+    public Response create(UniversidadeModel universidade) {
+        return Response.ok(
+        	gson.toJson(dao.create(universidade)),
+        	MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @PUT @Path("{id}")

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.RequestStatusModel;
 import model.UnidadeModel;
 
 /**
@@ -19,13 +20,15 @@ public class UnidadeDAO {
     public List<UnidadeModel> findAll() {
         List<UnidadeModel> list = new ArrayList<UnidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM unidade ORDER BY nome";
+        String sql = "SELECT * FROM Unidade ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery(sql);
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UnidadeModel unidade = processRow(rs);
+            	unidade.setRequestStatus(true);
+                list.add(unidade);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,7 +42,7 @@ public class UnidadeDAO {
     public List<UnidadeModel> findByName(String nome) {
         List<UnidadeModel> list = new ArrayList<UnidadeModel>();
         Connection c = null;
-        String sql = "SELECT * FROM unidade as e " +
+        String sql = "SELECT * FROM Unidade as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -48,7 +51,9 @@ public class UnidadeDAO {
             ps.setString(1, "%" + nome.toUpperCase() + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UnidadeModel unidade = processRow(rs);
+            	unidade.setRequestStatus(true);
+                list.add(unidade);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +65,7 @@ public class UnidadeDAO {
     }
 
     public UnidadeModel findById(int id) {
-        String sql = "SELECT * FROM unidade WHERE codigo = ?";
+        String sql = "SELECT * FROM Unidade WHERE id = ?";
         UnidadeModel unidade = null;
         Connection c = null;
         try {
@@ -70,6 +75,7 @@ public class UnidadeDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 unidade = processRow(rs);
+            	unidade.setRequestStatus(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,9 +86,9 @@ public class UnidadeDAO {
         return unidade;
     }
 
-    public List<UnidadeModel> findByFatherId(int id) {
+    public List<UnidadeModel> findByUsuarioId(int id) {
         List<UnidadeModel> list = new ArrayList<UnidadeModel>();
-        String sql = "SELECT * FROM unidade WHERE codigoUnidade = ?";
+        String sql = "SELECT * FROM Unidade WHERE idUsuario = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -90,7 +96,32 @@ public class UnidadeDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UnidadeModel unidade = processRow(rs);
+            	unidade.setRequestStatus(true);
+                list.add(unidade);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
+    public List<UnidadeModel> findByFatherId(int id) {
+        List<UnidadeModel> list = new ArrayList<UnidadeModel>();
+        String sql = "SELECT * FROM Unidade WHERE id = ?";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+            	UnidadeModel unidade = processRow(rs);
+            	unidade.setRequestStatus(true);
+                list.add(unidade);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,36 +134,56 @@ public class UnidadeDAO {
 
     public UnidadeModel save(UnidadeModel unidade)
     {
-        return unidade.getCodigo() > 0 ? update(unidade) : create(unidade);
+        return unidade.getId() > 0
+    		? update(unidade)
+			: create(unidade);
     }
 
     public UnidadeModel create(UnidadeModel unidade) {
         Connection c = null;
         PreparedStatement ps = null;
+        String query = String.format(
+              " INSERT INTO Unidade ("
+	        + "   idUsuario,"
+  	        + "   idUniversidade,"
+  	        + "   nome,"
+  	        + "   endereco,"
+  	        + "   outrasInformacoes,"
+  	        + "   unidadeSede"
+            + " ) VALUES ("
+  	        + "   %d, %d, '%s', '%s', '%s', %b"
+  	        + " )",
+            unidade.getIdUsuario(),
+            unidade.getIdUniversidade(),
+            unidade.getNome(),
+            unidade.getEndereco(),
+            unidade.getOutrasInformacoes(),
+            unidade.isUnidadeSede()
+        );
         try {
             c = ConnectionHelper.getConnection();
+            ps = c.prepareStatement(query);
             ps = c.prepareStatement(
-                "INSERT INTO unidade (nome, codigoUnidade) VALUES (?, ?)",
+                  "INSERT INTO Unidade ("
+        		+ "  idUsuario, idUniversidade, nome, endereco, outrasInformacoes, unidadeSede"
+        		+ ") VALUES (?, ?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
-            ps.setString(1, unidade.getNome());
-            ps.setInt(2, unidade.getCodigoIntituicaoDeEnsino());
-            // ps.setString(2, unidade.getDescricao());
-            // ps.setInt(3, unidade.getCodigoAnoLetivo());
-            // ps.setString(4, unidade.getAreaDoConhecimento());
 
-            // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
-            // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
-
-            //ps.setInt(5, unidade.getCodigo());
+            ps.setInt(1, unidade.getIdUsuario());
+            ps.setInt(2, unidade.getIdUniversidade());
+            ps.setString(3, unidade.getNome());
+            ps.setString(4, unidade.getEndereco());
+            ps.setString(5, unidade.getOutrasInformacoes());
+            ps.setBoolean(6, unidade.isUnidadeSede());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-
-            // Update the id in the returned object. This is important as this value must be returned to the client.
+            
             int id = rs.getInt(1);
-            unidade.setCodigo(id);
+            unidade.setId(id);
+        	unidade.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -144,15 +195,29 @@ public class UnidadeDAO {
 
     public UnidadeModel update(UnidadeModel unidade) {
           Connection c = null;
+          String query = String.format(
+                  " UPDATE Unidade"
+    	        + " SET"
+    	        + "   idUsuario=%d,"
+    	        + "   idUniversidade=%d,"
+    	        + "   nome='%s',"
+    	        + "   endereco='%s',"
+    	        + "   outrasInformacoes='%s',"
+    	        + "   unidadeSede=%b"
+    	        + " WHERE id=%d",
+                unidade.getIdUsuario(),
+                unidade.getIdUniversidade(),
+                unidade.getNome(),
+                unidade.getEndereco(),
+                unidade.getOutrasInformacoes(),
+                unidade.isUnidadeSede(),
+                unidade.getId()
+          );
           try {
                 c = ConnectionHelper.getConnection();
-                PreparedStatement ps = c.prepareStatement("UPDATE unidade SET nome=? cdigoUnidade=? WHERE codigo=?");
-                ps.setString(1, unidade.getNome());
-                ps.setInt(2, unidade.getCodigoIntituicaoDeEnsino());
-                // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
-                // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
-                ps.setInt(5, unidade.getCodigo());
+                PreparedStatement ps = c.prepareStatement(query);
                 ps.executeUpdate();
+            	unidade.setRequestStatus(true);
           } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -162,14 +227,16 @@ public class UnidadeDAO {
         return unidade;
     }
 
-    public boolean remove(int id) {
+    public RequestStatusModel remove(int id) {
         Connection c = null;
+        RequestStatusModel requestStatus = new RequestStatusModel(); 
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM unidade WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Unidade WHERE id=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
-            return count == 1;
+            requestStatus.set(count == 1);
+            return requestStatus;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -180,13 +247,13 @@ public class UnidadeDAO {
 
     protected UnidadeModel processRow(ResultSet rs) throws SQLException {
         UnidadeModel unidade = new UnidadeModel();
-        unidade.setCodigo(rs.getInt("codigo"));
+        unidade.setId(rs.getInt("id"));
+        unidade.setIdUsuario(rs.getInt("idUsuario"));
+        unidade.setIdUniversidade(rs.getInt("idUniversidade"));
         unidade.setNome(rs.getString("nome"));
-        unidade.setCodigoIntituicaoDeEnsino(rs.getInt("codigoUniversidade"));
-        // unidade.setAreaDoConhecimento(rs.getString("areaDoConhecimento"));
-        // unidade.setCodigoAnoLetivo(rs.getInt("codigoAnoLetivo"));
-        // unidade.setListaDeMaterias(rs.getString("listaDeMaterias"));
-        // unidade.setListaDeTurmas(rs.getString("listaDeTurmas"));
+        unidade.setEndereco(rs.getString("endereco"));
+        unidade.setOutrasInformacoes(rs.getString("outrasInformacoes"));
+        unidade.setUnidadeSede(rs.getBoolean("unidadeSede"));
         return unidade;
     }
 

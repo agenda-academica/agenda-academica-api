@@ -14,15 +14,6 @@ public class UniversidadeModel {
     private String site;
     private String logo;
     private boolean requestStatus;
-    // private String email;
-    // private String site;
-    // private String descricao;
-    // private String telefone;
-    private ArrayList<UnidadeModel> listaDeUnidades = new ArrayList<UnidadeModel>();
-
-    //ALTERA��O
-    //CRIAR LISTA DE lista de unidades(SERA NESCESSARIO UM NOVO MODEL)
-    //private ArrayList<AnoLetivoModel> listaDeAnosLetivos = new ArrayList<AnoLetivoModel>();
 
     public UniversidadeModel() {}
 
@@ -72,14 +63,6 @@ public class UniversidadeModel {
 
     public void setCodigoUsuario(int codigoUsuario) {
         this.codigoUsuario = codigoUsuario;
-    }
-
-    public ArrayList<UnidadeModel> getListaDeUnidades() {
-        return listaDeUnidades;
-    }
-
-    public void setListaDeUnidades(ArrayList<UnidadeModel> listaDeUnidades) {
-        this.listaDeUnidades = listaDeUnidades;
     }
 
     public boolean getRequestStatus() {

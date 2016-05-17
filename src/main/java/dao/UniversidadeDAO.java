@@ -25,7 +25,9 @@ public class UniversidadeDAO {
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery(sql);
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UniversidadeModel universidade = processRow(rs);
+            	universidade.setRequestStatus(true);
+                list.add(universidade);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +50,9 @@ public class UniversidadeDAO {
             ps.setString(1, "%" + nome.toUpperCase() + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UniversidadeModel universidade = processRow(rs);
+            	universidade.setRequestStatus(true);
+                list.add(universidade);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,6 +74,7 @@ public class UniversidadeDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 universidade = processRow(rs);
+            	universidade.setRequestStatus(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,7 +95,9 @@ public class UniversidadeDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UniversidadeModel universidade = processRow(rs);
+            	universidade.setRequestStatus(true);
+                list.add(universidade);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +118,9 @@ public class UniversidadeDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(processRow(rs));
+            	UniversidadeModel universidade = processRow(rs);
+            	universidade.setRequestStatus(true);
+                list.add(universidade);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +133,9 @@ public class UniversidadeDAO {
 
     public UniversidadeModel save(UniversidadeModel universidade)
     {
-        return universidade.getCodigo() > 0 ? update(universidade) : create(universidade);
+        return universidade.getCodigo() > 0 
+        	? update(universidade)
+        	: create(universidade);
     }
 
     public UniversidadeModel create(UniversidadeModel universidade) {
@@ -142,8 +153,6 @@ public class UniversidadeDAO {
             ps.setString(3, universidade.getAbreviacao());
             ps.setString(4, universidade.getSite());
             ps.setString(5, universidade.getLogo());
-            // universidade.setListaDeAnosLetivos(listaDeAnosLetivos);
-            // ps.setInt(9, universidade.getCodigo());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -152,6 +161,7 @@ public class UniversidadeDAO {
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
             universidade.setCodigo(id);
+            universidade.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -163,7 +173,6 @@ public class UniversidadeDAO {
 
     public UniversidadeModel update(UniversidadeModel universidade) {
         Connection c = null;
-
         String query = String.format(
               " UPDATE Universidade"
 	        + " SET"
@@ -180,12 +189,12 @@ public class UniversidadeDAO {
             universidade.getLogo(),
             universidade.getCodigo()
         );
-        System.out.println(query);
 
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(query);
             ps.executeUpdate();
+            universidade.setRequestStatus(true);
           } catch (SQLException e) {
               e.printStackTrace();
               throw new RuntimeException(e);
@@ -223,7 +232,6 @@ public class UniversidadeDAO {
         universidade.setAbreviacao(rs.getString("abreviacao"));
         universidade.setSite(rs.getString("site"));
         universidade.setLogo(rs.getString("logo"));
-        // universidade.setListaDeAnosLetivos(listaDeAnosLetivos);
         return universidade;
     }
 
