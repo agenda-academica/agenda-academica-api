@@ -25,8 +25,8 @@ public class UniversidadeDAO {
             Statement s = c.createStatement();
             ResultSet rs = s.executeQuery(sql);
             while (rs.next()) {
-            	UniversidadeModel universidade = processRow(rs);
-            	universidade.setRequestStatus(true);
+                UniversidadeModel universidade = processRow(rs);
+                universidade.setRequestStatus(true);
                 list.add(universidade);
             }
         } catch (SQLException e) {
@@ -50,8 +50,8 @@ public class UniversidadeDAO {
             ps.setString(1, "%" + nome.toUpperCase() + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            	UniversidadeModel universidade = processRow(rs);
-            	universidade.setRequestStatus(true);
+                UniversidadeModel universidade = processRow(rs);
+                universidade.setRequestStatus(true);
                 list.add(universidade);
             }
         } catch (SQLException e) {
@@ -74,7 +74,7 @@ public class UniversidadeDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 universidade = processRow(rs);
-            	universidade.setRequestStatus(true);
+                universidade.setRequestStatus(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,8 +95,8 @@ public class UniversidadeDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            	UniversidadeModel universidade = processRow(rs);
-            	universidade.setRequestStatus(true);
+                UniversidadeModel universidade = processRow(rs);
+                universidade.setRequestStatus(true);
                 list.add(universidade);
             }
         } catch (Exception e) {
@@ -118,8 +118,8 @@ public class UniversidadeDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            	UniversidadeModel universidade = processRow(rs);
-            	universidade.setRequestStatus(true);
+                UniversidadeModel universidade = processRow(rs);
+                universidade.setRequestStatus(true);
                 list.add(universidade);
             }
         } catch (Exception e) {
@@ -133,9 +133,9 @@ public class UniversidadeDAO {
 
     public UniversidadeModel save(UniversidadeModel universidade)
     {
-        return universidade.getCodigo() > 0 
-        	? update(universidade)
-        	: create(universidade);
+        return universidade.getCodigo() > 0
+            ? update(universidade)
+            : create(universidade);
     }
 
     public UniversidadeModel create(UniversidadeModel universidade) {
@@ -175,13 +175,13 @@ public class UniversidadeDAO {
         Connection c = null;
         String query = String.format(
               " UPDATE Universidade"
-	        + " SET"
-	        + "   codigoUsuario=%d,"
-	        + "   nome='%s',"
-	        + "   abreviacao='%s',"
-	        + "   site='%s',"
-	        + "   logo='%s'"
-	        + " WHERE codigo=%d",
+            + " SET"
+            + "   codigoUsuario=%d,"
+            + "   nome='%s',"
+            + "   abreviacao='%s',"
+            + "   site='%s',"
+            + "   logo='%s'"
+            + " WHERE codigo=%d",
             universidade.getCodigoUsuario(),
             universidade.getNome(),
             universidade.getAbreviacao(),
@@ -212,6 +212,7 @@ public class UniversidadeDAO {
             PreparedStatement ps = c.prepareStatement("DELETE FROM Universidade WHERE codigo=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
+            universidade.setCodigo(id);
             universidade.setRequestStatus(count == 1);
             return universidade;
           } catch (Exception e) {
@@ -224,7 +225,7 @@ public class UniversidadeDAO {
     }
 
     protected UniversidadeModel processRow(ResultSet rs) throws SQLException {
-    	UniversidadeModel universidade = new UniversidadeModel();
+        UniversidadeModel universidade = new UniversidadeModel();
 
         universidade.setCodigo(rs.getInt("codigo"));
         universidade.setCodigoUsuario(rs.getInt("codigoUsuario"));
