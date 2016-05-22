@@ -7,62 +7,69 @@ import java.util.ArrayList;
  */
 @XmlRootElement
 public class CursoModel {
-    private int codigo;
-    private int codigoUnidade;
+    private int id;
+    private int idUsuario;
+    private int idUniversidade;
+    private int idUnidade;
+    private String abreviacao;
     private String nome;
-
-    //aqui é so caso for professor, tem que ver como vai ficar
-    private ArrayList<TurmaModel> listaDeTurmas = new ArrayList<TurmaModel>();
-
-    public CursoModel() {}
-
-    /**
-     * @return the codigo
-     */
-    public int getCodigo() {
-        return codigo;
+    private String outrasInformacoes;
+    private boolean requestStatus;
+    
+    public int getId() {
+        return id;
     }
-
-    /**
-     * @param codigo the codigo to set
-     */
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setId(int id) {
+        this.id = id;
     }
-
-    /**
-     * @return the nome
-     */
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    public int getIdUniversidade() {
+        return idUniversidade;
+    }
+    public void setIdUniversidade(int idUniversidade) {
+        this.idUniversidade = idUniversidade;
+    }
+    public int getIdUnidade() {
+        return idUnidade;
+    }
+    public void setIdUnidade(int idUnidade) {
+        this.idUnidade = idUnidade;
+    }
+    public String getAbreviacao() {
+        return abreviacao;
+    }
+    public void setAbreviacao(String abreviacao) {
+        this.abreviacao = abreviacao;
+    }
     public String getNome() {
         return nome;
     }
-
-    /**
-     * @param nome the nome to set
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    /**
-     * @return the listaDeTurmas
-     */
-    public ArrayList<TurmaModel> getListaDeTurmas() {
-        return listaDeTurmas;
+    public String getOutrasInformacoes() {
+        return outrasInformacoes;
     }
-
-    /**
-     * @param listaDeTurmas the listaDeTurmas to set
-     */
-    public void setListaDeTurmas(ArrayList<TurmaModel> listaDeTurmas) {
-        this.listaDeTurmas = listaDeTurmas;
+    public void setOutrasInformacoes(String outrasInformacoes) {
+        this.outrasInformacoes = outrasInformacoes;
     }
-
-    public int getCodigoUnidade() {
-        return codigoUnidade;
+    public boolean getRequestStatus() {
+        return requestStatus;
     }
-
-    public void setCodigoUnidade(int codigoUnidade) {
-        this.codigoUnidade = codigoUnidade;
+    public void setRequestStatus(boolean requestStatus) {
+        this.requestStatus = requestStatus;
     }
+    @Override
+    public String toString() {
+        return "CursoModel [id=" + id + ", idUsuario=" + idUsuario + ", idUniversidade=" + idUniversidade
+                + ", idUnidade=" + idUnidade + ", abreviacao=" + abreviacao + ", nome=" + nome + ", outrasInformacoes="
+                + outrasInformacoes + ", requestStatus=" + requestStatus + "]";
+    }
+    
+    
 }
