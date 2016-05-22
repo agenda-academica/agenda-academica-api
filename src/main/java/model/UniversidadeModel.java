@@ -6,22 +6,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class UniversidadeModel {
-    private int codigo;
-    private int codigoUsuario;
+    private int id;
+    private int idUsuario;
     private String nome;
     private String abreviacao;
     private String site;
     private String logo;
     private boolean requestStatus;
-
-    public UniversidadeModel() {}
-
-    public int getCodigo() {
-        return codigo;
+    
+    public int getId() {
+        return id;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNome() {
@@ -56,19 +62,17 @@ public class UniversidadeModel {
         this.logo = logo;
     }
 
-    public int getCodigoUsuario() {
-        return codigoUsuario;
-    }
-
-    public void setCodigoUsuario(int codigoUsuario) {
-        this.codigoUsuario = codigoUsuario;
-    }
-
     public boolean getRequestStatus() {
         return requestStatus;
     }
 
     public void setRequestStatus(boolean requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "UniversidadeModel [id=" + id + ", idUsuario=" + idUsuario + ", nome=" + nome + ", abreviacao="
+                + abreviacao + ", site=" + site + ", logo=" + logo + ", requestStatus=" + requestStatus + "]";
     }
 }

@@ -49,14 +49,14 @@ public class UniversidadeResources {
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public UniversidadeModel findById(@PathParam("id") String codigo) {
-        return dao.findById(Integer.parseInt(codigo));
+    public UniversidadeModel findById(@PathParam("id") String id) {
+        return dao.findById(Integer.parseInt(id));
     }
 
     @GET @Path("usuario/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Response findByUsuarioId(@PathParam("id") String codigoUsuario) {
-        List<UniversidadeModel> list = dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
+    public Response findByUsuarioId(@PathParam("id") String idUsuario) {
+        List<UniversidadeModel> list = dao.findByUsuarioId(Integer.parseInt(idUsuario));
         if (list.size() < 1) {
             return this.getRequestStatusOk();
         }
@@ -88,7 +88,7 @@ public class UniversidadeResources {
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response update(UniversidadeModel universidade, @PathParam("id") String id) {
-        universidade.setCodigo(Integer.parseInt(id));
+        universidade.setId(Integer.parseInt(id));
         return Response.ok(
             gson.toJson(dao.update(universidade)),
             MediaType.APPLICATION_JSON

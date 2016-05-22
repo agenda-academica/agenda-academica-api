@@ -64,7 +64,7 @@ public class UniversidadeDAO {
     }
 
     public UniversidadeModel findById(int id) {
-        String sql = "SELECT * FROM Universidade WHERE codigo = ?";
+        String sql = "SELECT * FROM Universidade WHERE id = ?";
         UniversidadeModel universidade = null;
         Connection c = null;
         try {
@@ -87,7 +87,7 @@ public class UniversidadeDAO {
 
     public List<UniversidadeModel> findByUsuarioId(int id) {
         List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
-        String sql = "SELECT * FROM Universidade WHERE codigoUsuario = ? ORDER BY abreviacao";
+        String sql = "SELECT * FROM Universidade WHERE idUsuario = ? ORDER BY abreviacao";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -110,7 +110,7 @@ public class UniversidadeDAO {
 
     public List<UniversidadeModel> findByFatherId(int id) {
         List<UniversidadeModel> list = new ArrayList<UniversidadeModel>();
-        String sql = "SELECT * FROM Universidade WHERE codigoUsuario = ?";
+        String sql = "SELECT * FROM Universidade WHERE idUsuario = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -133,7 +133,7 @@ public class UniversidadeDAO {
 
     public UniversidadeModel save(UniversidadeModel universidade)
     {
-        return universidade.getCodigo() > 0
+        return universidade.getId() > 0
             ? update(universidade)
             : create(universidade);
     }
@@ -144,11 +144,11 @@ public class UniversidadeDAO {
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO Universidade (codigoUsuario, nome, abreviacao, site, logo) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO Universidade (idUsuario, nome, abreviacao, site, logo) VALUES (?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
 
-            ps.setInt(1, universidade.getCodigoUsuario());
+            ps.setInt(1, universidade.getIdUsuario());
             ps.setString(2, universidade.getNome());
             ps.setString(3, universidade.getAbreviacao());
             ps.setString(4, universidade.getSite());
@@ -160,7 +160,7 @@ public class UniversidadeDAO {
 
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            universidade.setCodigo(id);
+            universidade.setId(id);
             universidade.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,18 +176,18 @@ public class UniversidadeDAO {
         String query = String.format(
               " UPDATE Universidade"
             + " SET"
-            + "   codigoUsuario=%d,"
+            + "   idUsuario=%d,"
             + "   nome='%s',"
             + "   abreviacao='%s',"
             + "   site='%s',"
             + "   logo='%s'"
-            + " WHERE codigo=%d",
-            universidade.getCodigoUsuario(),
+            + " WHERE id=%d",
+            universidade.getIdUsuario(),
             universidade.getNome(),
             universidade.getAbreviacao(),
             universidade.getSite(),
             universidade.getLogo(),
-            universidade.getCodigo()
+            universidade.getId()
         );
 
         try {
@@ -209,10 +209,10 @@ public class UniversidadeDAO {
         UniversidadeModel universidade = new UniversidadeModel();
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM Universidade WHERE codigo=?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Universidade WHERE id=?");
             ps.setInt(1, id);
             int count = ps.executeUpdate();
-            universidade.setCodigo(id);
+            universidade.setId(id);
             universidade.setRequestStatus(count == 1);
             return universidade;
           } catch (Exception e) {
@@ -227,8 +227,8 @@ public class UniversidadeDAO {
     protected UniversidadeModel processRow(ResultSet rs) throws SQLException {
         UniversidadeModel universidade = new UniversidadeModel();
 
-        universidade.setCodigo(rs.getInt("codigo"));
-        universidade.setCodigoUsuario(rs.getInt("codigoUsuario"));
+        universidade.setId(rs.getInt("id"));
+        universidade.setIdUsuario(rs.getInt("idUsuario"));
         universidade.setNome(rs.getString("nome"));
         universidade.setAbreviacao(rs.getString("abreviacao"));
         universidade.setSite(rs.getString("site"));

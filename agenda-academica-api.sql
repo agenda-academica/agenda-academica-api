@@ -50,13 +50,13 @@ CREATE TABLE `Evento` (
 
 DROP TABLE IF EXISTS `Universidade`;
 CREATE TABLE `Universidade` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoUsuario` int(11) NOT NULL,
-  `nome` varchar(200) NOT NULL,
-  `abreviacao` varchar(45) DEFAULT NULL,
-  `site` varchar(100) DEFAULT NULL,
-  `logo` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `nome` VARCHAR(200) NOT NULL,
+  `abreviacao` VARCHAR(50) NOT NULL,
+  `site` VARCHAR(150) NULL DEFAULT NULL,
+  `logo` VARCHAR(150) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `Representante`;
