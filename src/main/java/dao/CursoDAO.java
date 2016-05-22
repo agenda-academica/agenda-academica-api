@@ -19,7 +19,7 @@ public class CursoDAO {
     public List<CursoModel> findAll() {
         List<CursoModel> list = new ArrayList<CursoModel>();
         Connection c = null;
-        String sql = "SELECT * FROM curso ORDER BY nome";
+        String sql = "SELECT * FROM Curso ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -40,9 +40,9 @@ public class CursoDAO {
     public List<CursoModel> findByName(String nome) {
         List<CursoModel> list = new ArrayList<CursoModel>();
         Connection c = null;
-        String sql = "SELECT * FROM curso as e " +
-        "WHERE UPPER(nome) LIKE ? " +
-        "ORDER BY nome";
+        String sql =   " SELECT * FROM Curso as e"
+                     + " WHERE UPPER(nome) LIKE ?"
+                     + " ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
@@ -61,7 +61,7 @@ public class CursoDAO {
     }
 
     public CursoModel findById(int id) {
-        String sql = "SELECT * FROM curso WHERE codigo = ?";
+        String sql = "SELECT * FROM Curso WHERE id = ?";
         CursoModel curso = null;
         Connection c = null;
         try {
@@ -81,9 +81,32 @@ public class CursoDAO {
         return curso;
     }
 
+    public List<CursoModel> findByUsuarioId(int id) {
+        List<CursoModel> list = new ArrayList<CursoModel>();
+        String sql = "SELECT * FROM Curso WHERE idUsuario = ? ORDER BY abreviacao";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CursoModel curso = processRow(rs);
+                curso.setRequestStatus(true);
+                list.add(curso);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
     public List<CursoModel> findByFatherId(int id) {
        List<CursoModel> list = new ArrayList<CursoModel>();
-       String sql = "SELECT * FROM curso WHERE codigoUnidade = ?";
+       String sql = "SELECT * FROM Curso WHERE idUnidade = ?";
        Connection c = null;
        try {
             c = ConnectionHelper.getConnection();
@@ -104,7 +127,7 @@ public class CursoDAO {
 
     public CursoModel save(CursoModel curso)
     {
-        return curso.getCodigo() > 0 ? update(curso) : create(curso);
+        return curso.getId() > 0 ? update(curso) : create(curso);
     }
 
     public CursoModel create(CursoModel curso) {
@@ -112,24 +135,25 @@ public class CursoDAO {
         PreparedStatement ps = null;
         try {
             c = ConnectionHelper.getConnection();
-            ps = c.prepareStatement("INSERT INTO curso (nome, codigoUnidade) VALUES (?, ?)",
+            ps = c.prepareStatement(
+                  "INSERT INTO Curso (idUsuario, idUniversidade, idUnidade, abreviacao, nome, outrasInformacoes) VALUES (?, ?, ?, ?, ?, ?)",
                 new String[] { "ID" });
 
-            ps.setString(1, curso.getNome());
-            ps.setInt(2, curso.getCodigoUnidade());
-            //ps.setString(2, curso.getDescricao());
-            //ps.setInt(3, curso.getCodigoAnoLetivo());
-            //ps.setString(4, curso.getAreaDoConhecimento());
-            //curso.setListaDeMaterias(rs.getString("listaDeMaterias"));
-            //curso.setListaDeTurmas(rs.getString("listaDeTurmas"));
-            //ps.setInt(5, curso.getCodigo());
+            ps.setInt(1, curso.getIdUsuario());
+            ps.setInt(2, curso.getIdUniversidade());
+            ps.setInt(3, curso.getIdUnidade());
+            ps.setString(4, curso.getAbreviacao());
+            ps.setString(5, curso.getNome());
+            ps.setString(6, curso.getOutrasInformacoes());
             ps.executeUpdate();
+            
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            curso.setCodigo(id);
+            curso.setId(id);
+            curso.setRequestStatus(true);
         } catch (Exception e) {
+            curso.setRequestStatus(false);
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
@@ -141,15 +165,28 @@ public class CursoDAO {
     public CursoModel update(CursoModel curso) {
         Connection c = null;
         try {
-        c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE curso SET nome=? cdigoUnidade=? WHERE codigo=?");
-            ps.setString(1, curso.getNome());
-            ps.setInt(2, curso.getCodigoUnidade());
-            //curso.setListaDeMaterias(rs.getString("listaDeMaterias"));
-            //curso.setListaDeTurmas(rs.getString("listaDeTurmas"));
-            ps.setInt(5, curso.getCodigo());
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(
+                  "UPDATE Curso"
+                + " SET idUsuario=?,"
+                + " idUniversidade=?,"
+                + " idUnidade=?,"
+                + " abreviacao=?,"
+                + " nome=?,"
+                + " outrasInformacoes=?"
+                + " WHERE id=?"
+            );
+            ps.setInt(1, curso.getIdUsuario());
+            ps.setInt(2, curso.getIdUniversidade());
+            ps.setInt(3, curso.getIdUnidade());
+            ps.setString(4, curso.getAbreviacao());
+            ps.setString(5, curso.getNome());
+            ps.setString(6, curso.getOutrasInformacoes());
+            ps.setInt(7, curso.getId());
             ps.executeUpdate();
+            curso.setRequestStatus(true);
           } catch (SQLException e) {
+              curso.setRequestStatus(false);
               e.printStackTrace();
               throw new RuntimeException(e);
           } finally {
@@ -158,31 +195,33 @@ public class CursoDAO {
         return curso;
     }
 
-    public boolean remove(int id) {
+    public CursoModel remove(CursoModel curso) {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM curso WHERE codigo=?");
-            ps.setInt(1, id);
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Curso WHERE id=?");
+            ps.setInt(1, curso.getId());
             int count = ps.executeUpdate();
-            return count == 1;
+            curso.setRequestStatus(count == 1);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
+        return curso;
     }
 
     protected CursoModel processRow(ResultSet rs) throws SQLException {
         CursoModel curso = new CursoModel();
-        curso.setCodigo(rs.getInt("codigo"));
+        curso.setId(rs.getInt("id"));
+        curso.setIdUsuario(rs.getInt("idUsuario"));
+        curso.setIdUniversidade(rs.getInt("idUniversidade"));
+        curso.setIdUnidade(rs.getInt("idUnidade"));
+        curso.setAbreviacao(rs.getString("abreviacao"));
         curso.setNome(rs.getString("nome"));
-        curso.setCodigoUnidade(rs.getInt("codigo"));
-        //curso.setAreaDoConhecimento(rs.getString("areaDoConhecimento"));
-        //curso.setCodigoAnoLetivo(rs.getInt("codigoAnoLetivo"));
-        //curso.setListaDeMaterias(rs.getString("listaDeMaterias"));
-        //curso.setListaDeTurmas(rs.getString("listaDeTurmas"));
+        curso.setOutrasInformacoes(rs.getString("outrasInformacoes"));
+        curso.setRequestStatus(true);
         return curso;
     }
 

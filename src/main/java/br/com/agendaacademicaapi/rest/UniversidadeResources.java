@@ -18,22 +18,27 @@ import com.google.gson.Gson;
 import dao.UniversidadeDAO;
 import dao.UnidadeDAO;
 import model.UniversidadeModel;
+import model.RequestStatusModel;
 import model.UnidadeModel;
 
 @Path("/universidade")
 public class UniversidadeResources {
 
-	UniversidadeDAO dao = new UniversidadeDAO();
+    UniversidadeDAO dao = new UniversidadeDAO();
     Gson gson = new Gson();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     public Response findAll() {
-    	List<UniversidadeModel> list = dao.findAll();
+        List<UniversidadeModel> list = dao.findAll();
         if (list.size() < 1) {
-            return Response.status(Response.Status.OK).entity("{\"responseStatus\": \"true\"}").build();
+            return getRequestStatusOk();
         }
-        return Response.ok(gson.toJson(list), MediaType.APPLICATION_JSON).build();
+
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("search/{query}")
@@ -51,11 +56,15 @@ public class UniversidadeResources {
     @GET @Path("usuario/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response findByUsuarioId(@PathParam("id") String codigoUsuario) {
-    	List<UniversidadeModel> list = dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
+        List<UniversidadeModel> list = dao.findByUsuarioId(Integer.parseInt(codigoUsuario));
         if (list.size() < 1) {
-            return Response.status(Response.Status.OK).entity("{\"responseStatus\": \"true\"}").build();
+            return this.getRequestStatusOk();
         }
-        return Response.ok(gson.toJson(list), MediaType.APPLICATION_JSON).build();
+
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("findByChildrenId/{query}")
@@ -70,23 +79,36 @@ public class UniversidadeResources {
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response create(UniversidadeModel universidade) {
         return Response.ok(
-        	gson.toJson(dao.create(universidade)),
-        	MediaType.APPLICATION_JSON
+            gson.toJson(dao.create(universidade)),
+            MediaType.APPLICATION_JSON
         ).build();
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public UniversidadeModel update(UniversidadeModel universidade) {
-        dao.update(universidade);
-        return universidade;
+    public Response update(UniversidadeModel universidade, @PathParam("id") String id) {
+        universidade.setCodigo(Integer.parseInt(id));
+        return Response.ok(
+            gson.toJson(dao.update(universidade)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @DELETE @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public UniversidadeModel remove(@PathParam("id") int id) {
-        return dao.remove(id);
+    public Response remove(@PathParam("id") int id) {
+        return Response.ok(
+            gson.toJson(dao.remove(id)),
+            MediaType.APPLICATION_JSON
+        ).build();
+    }
+
+    private Response getRequestStatusOk() {
+        return Response.ok(
+            gson.toJson(new RequestStatusModel(true)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
 }

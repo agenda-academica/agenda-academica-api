@@ -6,27 +6,21 @@ CREATE DATABASE `agenda-academica-api`;
 USE `agenda-academica-api`;
 
 -----
--- Drops
------
-DROP TABLE `Curso`;
-DROP TABLE `Disciplina`;
-DROP TABLE `Evento`;
-DROP TABLE `Universidade`;
-DROP TABLE `Representante`;
-DROP TABLE `Turma`;
-DROP TABLE `Unidade`;
-DROP TABLE `Usuario`;
-
------
 -- Creates
 -----
+DROP TABLE IF EXISTS `Curso`;
 CREATE TABLE `Curso` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoUnidade` int(11) DEFAULT NULL,
-  `nome` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `idUniversidade` INT NOT NULL,
+  `idUnidade` INT NOT NULL,
+  `abreviacao` VARCHAR(50) NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `outrasInformacoes` TEXT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Disciplina`;
 CREATE TABLE `Disciplina` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `codigoTurma` int(11) DEFAULT NULL,
@@ -38,6 +32,7 @@ CREATE TABLE `Disciplina` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Evento`;
 CREATE TABLE `Evento` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `codigoUsuario` int(11) NOT NULL,
@@ -53,6 +48,7 @@ CREATE TABLE `Evento` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Universidade`;
 CREATE TABLE `Universidade` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `codigoUsuario` int(11) NOT NULL,
@@ -63,6 +59,7 @@ CREATE TABLE `Universidade` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Representante`;
 CREATE TABLE `Representante` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(75) DEFAULT NULL,
@@ -71,6 +68,7 @@ CREATE TABLE `Representante` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Turma`;
 CREATE TABLE `Turma` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `codigoCurso` int(11) DEFAULT NULL,
@@ -78,6 +76,7 @@ CREATE TABLE `Turma` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Unidade`;
 CREATE TABLE `Unidade` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `idUsuario` INT NOT NULL,
@@ -89,6 +88,7 @@ CREATE TABLE `Unidade` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `Usuario`;
 CREATE TABLE `Usuario` (
   `codigo` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(75) DEFAULT NULL,

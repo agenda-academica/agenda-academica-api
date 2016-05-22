@@ -1,6 +1,5 @@
 package model;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 
 /**
  * @author Sergio Eduardo Bertolazo
