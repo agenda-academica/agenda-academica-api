@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
-import dao.CursoDAO;
 import dao.UnidadeDAO;
 import model.RequestStatusModel;
 import model.UnidadeModel;
@@ -68,16 +67,6 @@ public class UnidadeResources {
 
         return Response.ok(
             gson.toJson(list),
-            MediaType.APPLICATION_JSON
-        ).build();
-    }
-
-    @GET @Path("findByChildrenIdCusro/{query}")
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Response findByChildrenIdTrabalho(@PathParam("query") int query) {
-        CursoDAO trabahoDao = new CursoDAO();
-        return Response.ok(
-            gson.toJson(trabahoDao.findByFatherId(query)),
             MediaType.APPLICATION_JSON
         ).build();
     }

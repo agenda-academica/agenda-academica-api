@@ -14,13 +14,12 @@ import model.TurmaModel;
  * @author Sergio Eduardo Bertolazo
  */
 public class TurmaDAO {
-    //List<TurmaModel> list = new ArrayList<TurmaModel>();
     public TurmaDAO() {}
 
     public List<TurmaModel> findAll() {
         List<TurmaModel> list = new ArrayList<TurmaModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma ORDER BY nome";
+        String sql = "SELECT * FROM Turma ORDER BY nome";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -40,7 +39,7 @@ public class TurmaDAO {
     public List<TurmaModel> findByName(String nome) {
         List<TurmaModel> list = new ArrayList<TurmaModel>();
         Connection c = null;
-        String sql = "SELECT * FROM turma as e " +
+        String sql = "SELECT * FROM Turma as e " +
             "WHERE UPPER(nome) LIKE ? " +
             "ORDER BY nome";
         try {
@@ -61,7 +60,7 @@ public class TurmaDAO {
     }
 
     public TurmaModel findById(int id) {
-        String sql = "SELECT * FROM turma WHERE codigo = ?";
+        String sql = "SELECT * FROM Turma WHERE id = ?";
         TurmaModel turma = null;
         Connection c = null;
         try {
@@ -81,9 +80,32 @@ public class TurmaDAO {
         return turma;
     }
 
+    public List<TurmaModel> findByUsuarioId(int id) {
+        List<TurmaModel> list = new ArrayList<TurmaModel>();
+        String sql = "SELECT * FROM Turma WHERE idUsuario = ? ORDER BY nome";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TurmaModel turma = processRow(rs);
+                turma.setRequestStatus(true);
+                list.add(turma);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
     public List<TurmaModel> findByFatherId(int id) {
         List<TurmaModel> list = new ArrayList<TurmaModel>();
-        String sql = "SELECT * FROM turma WHERE codigoCurso = ?";
+        String sql = "SELECT * FROM Turma WHERE idCurso = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -104,7 +126,7 @@ public class TurmaDAO {
 
     public TurmaModel save(TurmaModel turma)
     {
-        return turma.getCodigo() > 0 ? update(turma) : create(turma);
+        return turma.getId() > 0 ? update(turma) : create(turma);
     }
 
     public TurmaModel create(TurmaModel turma) {
@@ -113,11 +135,26 @@ public class TurmaDAO {
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO turma (nome, codigoCurso) VALUES (?, ?)",
+                "INSERT INTO Turma ("
+                + "  idUsuario,"
+                + "  idUniversidade,"
+                + "  idUnidade,"
+                + "  idCurso,"
+                + "  nome,"
+                + "  email,"
+                + "  site,"
+                + "  outrasInformacoes"
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 new String[] { "ID" }
             );
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
+            ps.setInt(1, turma.getIdUsuario());
+            ps.setInt(2, turma.getIdUniversidade());
+            ps.setInt(3, turma.getIdUnidade());
+            ps.setInt(4, turma.getIdCurso());
+            ps.setString(5, turma.getNome());
+            ps.setString(6, turma.getEmail());
+            ps.setString(7, turma.getSite());
+            ps.setString(8, turma.getOutrasInformacoes());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -125,7 +162,8 @@ public class TurmaDAO {
 
             // Update the id in the returned object. This is important as this value must be returned to the client.
             int id = rs.getInt(1);
-            turma.setCodigo(id);
+            turma.setId(id);
+            turma.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -139,12 +177,31 @@ public class TurmaDAO {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE turma SET nome=?, codigoCurso=? WHERE codigo=?");
-            ps.setString(1, turma.getNome());
-            ps.setInt(2, turma.getCodigoCurso());
-            ps.setInt(3, turma.getCodigo());
+            PreparedStatement ps = c.prepareStatement(
+                "UPDATE Turma SET"
+                + "  idUsuario=?,"
+                + "  idUniversidade=?,"
+                + "  idUnidade=?,"
+                + "  idCurso=?,"
+                + "  nome=?,"
+                + "  email=?,"
+                + "  site=?,"
+                + "  outrasInformacoes=?"
+                + " WHERE id=?"
+            );
+            ps.setInt(1, turma.getIdUsuario());
+            ps.setInt(2, turma.getIdUniversidade());
+            ps.setInt(3, turma.getIdUnidade());
+            ps.setInt(4, turma.getIdCurso());
+            ps.setString(5, turma.getNome());
+            ps.setString(6, turma.getEmail());
+            ps.setString(7, turma.getSite());
+            ps.setString(8, turma.getOutrasInformacoes());
+            ps.setInt(9, turma.getId());
             ps.executeUpdate();
+            turma.setRequestStatus(true);
         } catch (SQLException e) {
+            turma.setRequestStatus(false);
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
@@ -153,33 +210,35 @@ public class TurmaDAO {
         return turma;
     }
 
-    public boolean remove(int id) {
+    public TurmaModel remove(TurmaModel turma) {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM turma WHERE codigo=?");
-            ps.setInt(1, id);
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Turma WHERE id=?");
+            ps.setInt(1, turma.getId());
             int count = ps.executeUpdate();
-            return count == 1;
+            turma.setRequestStatus(count == 1);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
+        return turma;
     }
 
     protected TurmaModel processRow(ResultSet rs) throws SQLException {
-        TurmaModel turma = new TurmaModel();
-        turma.setCodigo(rs.getInt("codigo"));
-        turma.setNome(rs.getString("nome"));
-        turma.setCodigoCurso(rs.getInt("codigoCurso"));
-        /*
-        turma.setListaDeAlunos(listaDeAlunos);
-        turma.setListaDeMateria(listaDeMateria);
-        turma.setListaDeRepresentantes(listaDeRepresentantes);
-        */
-        return turma;
+        return new TurmaModel()
+            .setId(rs.getInt("id"))
+            .setIdUsuario(rs.getInt("idUsuario"))
+            .setIdUniversidade(rs.getInt("idUniversidade"))
+            .setIdUnidade(rs.getInt("idUnidade"))
+            .setIdCurso(rs.getInt("idCurso"))
+            .setNome(rs.getString("nome"))
+            .setEmail(rs.getString("email"))
+            .setSite(rs.getString("site"))
+            .setOutrasInformacoes(rs.getString("outrasInformacoes"))
+            .setRequestStatus(true);
     }
 
 }

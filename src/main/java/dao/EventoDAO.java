@@ -192,12 +192,10 @@ public class EventoDAO {
             ps.setInt(6, evento.getCodigoTurma());
             ps.setInt(7, evento.getCodigoDisciplina());
 
-            Date dataInicio = null;
-            Date dataFim = null;
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             try{
-                dataInicio = (Date) format.parse(evento.getDataInicioEvento());
-                dataFim =  (Date) format.parse(evento.getDataFimEvento());
+//                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+//                Date dataInicio = (Date) format.parse(evento.getDataInicioEvento());
+//                Date dataFim = (Date) format.parse(evento.getDataFimEvento());
             }
             catch(Exception ex){
 

@@ -1,6 +1,5 @@
 package model;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 
 /**
  * @author Sergio Eduardo Bertolazo
@@ -64,12 +63,15 @@ public class CursoModel {
     public void setRequestStatus(boolean requestStatus) {
         this.requestStatus = requestStatus;
     }
+
     @Override
     public String toString() {
         return "CursoModel [id=" + id + ", idUsuario=" + idUsuario + ", idUniversidade=" + idUniversidade
                 + ", idUnidade=" + idUnidade + ", abreviacao=" + abreviacao + ", nome=" + nome + ", outrasInformacoes="
-                + outrasInformacoes + ", requestStatus=" + requestStatus + "]";
+                + outrasInformacoes + ", requestStatus=" + requestStatus + ", getId()=" + getId() + ", getIdUsuario()="
+                + getIdUsuario() + ", getIdUniversidade()=" + getIdUniversidade() + ", getIdUnidade()=" + getIdUnidade()
+                + ", getAbreviacao()=" + getAbreviacao() + ", getNome()=" + getNome() + ", getOutrasInformacoes()="
+                + getOutrasInformacoes() + ", getRequestStatus()=" + getRequestStatus() + ", getClass()=" + getClass()
+                + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
     }
-    
-    
 }

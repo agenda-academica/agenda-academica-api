@@ -11,61 +11,103 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import dao.DisciplinaDAO;
+import com.google.gson.Gson;
+
 import dao.TurmaDAO;
-import model.DisciplinaModel;
+import model.RequestStatusModel;
 import model.TurmaModel;
 
 @Path("/turma")
 public class TurmaResources {
 
     TurmaDAO dao = new TurmaDAO();
+    Gson gson = new Gson();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<TurmaModel> findAll() {
-        return dao.findAll();
+    public Response findAll() {
+        List<TurmaModel> list = dao.findAll();
+        if (list.size() < 1) {
+            return this.getRequestStatusOk();
+        }
+        
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<TurmaModel> findByName(@PathParam("query") String query) {
-        return dao.findByName(query);
+    public Response findByName(@PathParam("query") String query) {
+        return Response.ok(
+            gson.toJson(dao.findByName(query)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public TurmaModel findById(@PathParam("id") String codigo) {
-        return dao.findById(Integer.parseInt(codigo));
+    public Response findById(@PathParam("id") int id) {
+        return Response.ok(
+            gson.toJson(dao.findById(id)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
-    @GET @Path("findByChildrenId/{query}")
+    @GET @Path("usuario/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<DisciplinaModel> findByChildrenId(@PathParam("query") int query) {
-        DisciplinaDAO materiaDAO = new DisciplinaDAO();
-        return materiaDAO.findByFatherIdTurma(query);
+    public Response findByUsuarioId(@PathParam("id") String idUsuario) {
+        List<TurmaModel> list = dao.findByUsuarioId(Integer.parseInt(idUsuario));
+        if (list.size() < 1) {
+            return this.getRequestStatusOk();
+        }
+
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public TurmaModel create(TurmaModel turma) {
-        return dao.create(turma);
+    public Response create(TurmaModel turma) {
+        return Response.ok(
+            gson.toJson(dao.create(turma)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public TurmaModel update(TurmaModel turma) {
-        dao.update(turma);
-        return turma;
+    public Response update(TurmaModel turma, @PathParam("id") int id) {
+        turma.setId(id);
+        return Response.ok(
+            gson.toJson(dao.update(turma)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @DELETE @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void remove(@PathParam("id") int id) {
-        dao.remove(id);
+    public Response remove(@PathParam("id") int id) {
+        TurmaModel turma = new TurmaModel();
+        turma.setId(id);
+        return Response.ok(
+            gson.toJson(dao.remove(turma)),
+            MediaType.APPLICATION_JSON
+        ).build();
+    }
+
+    private Response getRequestStatusOk() {
+        return Response.ok(
+            gson.toJson(new RequestStatusModel(true)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
 }

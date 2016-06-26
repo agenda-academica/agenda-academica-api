@@ -36,7 +36,6 @@ public class CursoDAO {
         return list;
     }
 
-
     public List<CursoModel> findByName(String nome) {
         List<CursoModel> list = new ArrayList<CursoModel>();
         Connection c = null;

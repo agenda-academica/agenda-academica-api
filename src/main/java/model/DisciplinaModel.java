@@ -1,5 +1,4 @@
 package model;
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,88 +7,115 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class DisciplinaModel {
-    // MUDAR PARA DISCIPLINA
-    private int codigo;
-    private int codigoTurma;
+    private int id;
+    private int idUsuario;
+    private int idUniversidade;
+    private int idUnidade;
+    private int idCurso;
+    private int idTurma;
+    private String abreviacao;
     private String nome;
-    private String diaDaSemana;
-    private Date horarioInicio;
-    private Date horarioTermino;
-    private String sala;
-    // private ArrayList<String> roteiroDaMateria = new ArrayList<String>();
-    // private ArrayList<EventoModel> listaDeEventos = new ArrayList<EventoModel>();
+    private String horaInicio;
+    private String horaFim;
+    private int diaSemana;
+    private boolean requestStatus;
 
-    public DisciplinaModel() {}
-
-    public int getCodigo() {
-        return codigo;
+    public int getId() {
+        return id;
     }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public DisciplinaModel setId(int id) {
+        this.id = id;
+        return this;
+    }
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+    public DisciplinaModel setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+        return this;
+    }
+    public int getIdUniversidade() {
+        return idUniversidade;
+    }
+    public DisciplinaModel setIdUniversidade(int idUniversidade) {
+        this.idUniversidade = idUniversidade;
+        return this;
+    }
+    public int getIdUnidade() {
+        return idUnidade;
+    }
+    public DisciplinaModel setIdUnidade(int idUnidade) {
+        this.idUnidade = idUnidade;
+        return this;
+    }
+    public int getIdCurso() {
+        return idCurso;
+    }
+    public DisciplinaModel setIdCurso(int idCurso) {
+        this.idCurso = idCurso;
+        return this;
+    }
+    public int getIdTurma() {
+        return idTurma;
+    }
+    public DisciplinaModel setIdTurma(int idTurma) {
+        this.idTurma = idTurma;
+        return this;
+    }
+    public String getAbreviacao() {
+        return abreviacao;
+    }
+    public DisciplinaModel setAbreviacao(String abreviacao) {
+        this.abreviacao = abreviacao;
+        return this;
     }
     public String getNome() {
         return nome;
     }
-    public void setNome(String nome) {
+    public DisciplinaModel setNome(String nome) {
         this.nome = nome;
+        return this;
+    }
+    public String getHoraInicio() {
+        return horaInicio;
+    }
+    public DisciplinaModel setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+        return this;
+    }
+    public String getHoraFim() {
+        return horaFim;
+    }
+    public DisciplinaModel setHoraFim(String horaFim) {
+        this.horaFim = horaFim;
+        return this;
+    }
+    public int getDiaSemana() {
+        return diaSemana;
+    }
+    public DisciplinaModel setDiaSemana(int diaSemana) {
+        this.diaSemana = diaSemana;
+        return this;
+    }
+    public boolean getRequestStatus() {
+        return requestStatus;
+    }
+    public DisciplinaModel setRequestStatus(boolean requestStatus) {
+        this.requestStatus = requestStatus;
+        return this;
     }
 
-    public String getDiaDaSemana() {
-        return diaDaSemana;
-    }
-    public void setDiaDaSemana(String diaDaSemana) {
-        this.diaDaSemana = diaDaSemana;
-    }
-
-    public String getSala() {
-        return sala;
-    }
-
-    public void setSala(String sala) {
-        this.sala = sala;
-    }
-
-    /*
-    public int getCodigoCurso() {
-        return codigoCurso;
-    }
-
-    public void setCodigoCurso(int codigoCurso) {
-        this.codigoCurso = codigoCurso;
-    }
-    */
-    public int getCodigoTurma() {
-        return codigoTurma;
-    }
-
-    public void setCodigoTurma(int codigoTurma) {
-        this.codigoTurma = codigoTurma;
-    }
-
-    /*
-    public ArrayList<AulaModel> getListaDeAulas() {
-        return listaDeAulas;
-    }
-
-    public void setListaDeAulas(ArrayList<AulaModel> listaDeAulas) {
-        this.listaDeAulas = listaDeAulas;
-    }
-    */
-
-    public Date getHorarioInicio() {
-        return horarioInicio;
-    }
-
-    public void setHorarioInicio(Date horarioInicio) {
-        this.horarioInicio = horarioInicio;
-    }
-
-    public Date getHorarioTermino() {
-        return horarioTermino;
-    }
-
-    public void setHorarioTermino(Date horarioTermino) {
-        this.horarioTermino = horarioTermino;
+    @Override
+    public String toString() {
+        return "DisciplinaModel [id=" + id + ", idUsuario=" + idUsuario + ", idUniversidade=" + idUniversidade
+                + ", idUnidade=" + idUnidade + ", idCurso=" + idCurso + ", idTurma=" + idTurma + ", abreviacao="
+                + abreviacao + ", nome=" + nome + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", diaSemana="
+                + diaSemana + ", requestStatus=" + requestStatus + ", getId()=" + getId() + ", getIdUsuario()="
+                + getIdUsuario() + ", getIdUniversidade()=" + getIdUniversidade() + ", getIdUnidade()=" + getIdUnidade()
+                + ", getIdCurso()=" + getIdCurso() + ", getIdTurma()=" + getIdTurma() + ", getAbreviacao()="
+                + getAbreviacao() + ", getNome()=" + getNome() + ", getHoraInicio()=" + getHoraInicio()
+                + ", getHoraFim()=" + getHoraFim() + ", getDiaSemana()=" + getDiaSemana() + ", getRequestStatus()="
+                + getRequestStatus() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
+                + super.toString() + "]";
     }
 }

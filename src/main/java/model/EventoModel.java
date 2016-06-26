@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -138,6 +137,6 @@ public class EventoModel {
         this.dataFimEvento = dataFimEvento;
     }
 
-    //talvez não vai existir
+    //talvez nï¿½o vai existir
     //private ArrayList<AnexoModel> listaDeAnexos = new ArrayList<AnexoModel>();
 }

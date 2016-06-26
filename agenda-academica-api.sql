@@ -21,15 +21,19 @@ CREATE TABLE `Curso` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `Disciplina`;
-CREATE TABLE `Disciplina` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoTurma` int(11) DEFAULT NULL,
-  `nome` varchar(75) DEFAULT NULL,
-  `horarioInicio` datetime DEFAULT NULL,
-  `horarioFim` datetime DEFAULT NULL,
-  `diaDaSemana` varchar(25) DEFAULT NULL,
-  `sala` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+CREATE TABLE IF NOT EXISTS `Disciplina` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `idUniversidade` INT NOT NULL,
+  `idUnidade` INT NOT NULL,
+  `idCurso` INT NOT NULL,
+  `idTurma` INT NOT NULL,
+  `abreviacao` VARCHAR(50) NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `horaInicio` TIME NOT NULL,
+  `horaFim` TIME NOT NULL,
+  `diaSemana` TINYINT NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `Evento`;
@@ -70,10 +74,16 @@ CREATE TABLE `Representante` (
 
 DROP TABLE IF EXISTS `Turma`;
 CREATE TABLE `Turma` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoCurso` int(11) DEFAULT NULL,
-  `nome` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `idUniversidade` INT NOT NULL,
+  `idUnidade` INT NOT NULL,
+  `idCurso` INT NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NULL,
+  `site` VARCHAR(100) NULL,
+  `outrasInformacoes` TEXT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `Unidade`;

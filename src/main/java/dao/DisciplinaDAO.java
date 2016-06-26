@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +19,7 @@ public class DisciplinaDAO {
     public List<DisciplinaModel> findAll() {
         List<DisciplinaModel> list = new ArrayList<DisciplinaModel>();
         Connection c = null;
-        String sql = "SELECT * FROM disciplina ORDER BY nome";
+        String sql = "SELECT * FROM Disciplina ORDER BY horaInicio";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -40,9 +39,9 @@ public class DisciplinaDAO {
     public List<DisciplinaModel> findByName(String nome) {
         List<DisciplinaModel> list = new ArrayList<DisciplinaModel>();
         Connection c = null;
-        String sql = "SELECT * FROM disciplina as e " +
+        String sql = "SELECT * FROM Disciplina as e " +
         "WHERE UPPER(nome) LIKE ? " +
-        "ORDER BY nome";
+        "ORDER BY horaInicio";
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
@@ -61,7 +60,7 @@ public class DisciplinaDAO {
     }
 
     public DisciplinaModel findById(int id) {
-        String sql = "SELECT * FROM disciplina WHERE codigo = ?";
+        String sql = "SELECT * FROM Disciplina WHERE id = ?";
         DisciplinaModel disciplina = null;
         Connection c = null;
         try {
@@ -81,9 +80,32 @@ public class DisciplinaDAO {
         return disciplina;
     }
 
+    public List<DisciplinaModel> findByUsuarioId(int id) {
+        List<DisciplinaModel> list = new ArrayList<DisciplinaModel>();
+        String sql = "SELECT * FROM Disciplina WHERE idUsuario = ? ORDER BY horaInicio";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DisciplinaModel disciplina = processRow(rs);
+                disciplina.setRequestStatus(true);
+                list.add(disciplina);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
     public List<DisciplinaModel> findByFatherIdTurma(int id) {
         List<DisciplinaModel> list = new ArrayList<DisciplinaModel>();
-        String sql = "SELECT * FROM disciplina WHERE codigoTurma = ?";
+        String sql = "SELECT * FROM Disciplina WHERE idTurma = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -104,7 +126,7 @@ public class DisciplinaDAO {
 
     public List<DisciplinaModel> findByFatherIdCurso(int id) {
         List<DisciplinaModel> list = new ArrayList<DisciplinaModel>();
-        String sql = "SELECT * FROM disciplina WHERE codigoCurso = ?";
+        String sql = "SELECT * FROM Disciplina WHERE idCurso = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -125,7 +147,7 @@ public class DisciplinaDAO {
 
     public DisciplinaModel save(DisciplinaModel disciplina)
     {
-        return disciplina.getCodigo() > 0 ? update(disciplina) : create(disciplina);
+        return disciplina.getId() > 0 ? update(disciplina) : create(disciplina);
     }
 
     public DisciplinaModel create(DisciplinaModel disciplina) {
@@ -134,25 +156,38 @@ public class DisciplinaDAO {
         try {
             c = ConnectionHelper.getConnection();
             ps = c.prepareStatement(
-                "INSERT INTO disciplina (nome, codigoTurma, horarioInicio, horarioFim, diaDaSemana, sala) VALUES (?, ?, ?, ?, ?, ?)",
-                new String[] { "ID" }
-            );
-            ps.setString(1, disciplina.getNome());
-            ps.setInt(2, disciplina.getCodigoTurma());
-            ps.setDate(3, (Date) disciplina.getHorarioTermino());
-            ps.setDate(4, (Date) disciplina.getHorarioInicio());
-            ps.setString(5, disciplina.getDiaDaSemana());
-            ps.setString(6, disciplina.getSala());
+                    "INSERT INTO Disciplina ("
+                  + "  idUsuario,"
+                  + "  idUniversidade,"
+                  + "  idUnidade,"
+                  + "  idCurso,"
+                  + "  idTurma,"
+                  + "  abreviacao,"
+                  + "  nome,"
+                  + "  horaInicio,"
+                  + "  horaFim,"
+                  + "  diaSemana"
+                  + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                  new String[] { "ID" }
+              );
+              ps.setInt(1, disciplina.getIdUsuario());
+              ps.setInt(2, disciplina.getIdUniversidade());
+              ps.setInt(3, disciplina.getIdUnidade());
+              ps.setInt(4, disciplina.getIdCurso());
+              ps.setInt(5, disciplina.getIdTurma());
+              ps.setString(6, disciplina.getAbreviacao());
+              ps.setString(7, disciplina.getNome());
+              ps.setString(8, disciplina.getHoraInicio());
+              ps.setString(9, disciplina.getHoraFim());
+              ps.setInt(10, disciplina.getDiaSemana());
 
-            //disciplina.setListaDeAulas(rs.getString("LISTAAAA"));
-            //disciplina.setRoteiroDadisciplina(rs.getString("LISTAAAA"));
-            //ps.setInt(7, disciplina.getCodigo());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
+            
             // Update the id in the returned object. This is important as this value must be returned to the client.
-            int id = rs.getInt(1);
-            disciplina.setCodigo(id);
+            disciplina.setId(rs.getInt(1));
+            disciplina.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -166,16 +201,31 @@ public class DisciplinaDAO {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE disciplina SET nome=?, codigoTurma=?, horarioInicio=?, horarioFim=?, dataInicioEvento=?, diaDaSemana, sala=? WHERE codigo=?");
-            ps.setString(1, disciplina.getNome());
-            ps.setInt(2, disciplina.getCodigoTurma());
-            ps.setDate(3, (Date) disciplina.getHorarioTermino());
-            ps.setDate(4, (Date) disciplina.getHorarioInicio());
-            ps.setString(5, disciplina.getDiaDaSemana());
-            ps.setString(6, disciplina.getSala());
-            // disciplina.setListaDeAulas(rs.getString("LISTAAAA"));
-            // disciplina.setRoteiroDadisciplina(rs.getString("LISTAAAA"));
-            ps.setInt(7, disciplina.getCodigo());
+            PreparedStatement ps = c.prepareStatement(
+                    "UPDATE Disciplina SET"
+                  + "  idUsuario=?,"
+                  + "  idUniversidade=?,"
+                  + "  idUnidade=?,"
+                  + "  idCurso=?,"
+                  + "  idTurma=?,"
+                  + "  abreviacao=?,"
+                  + "  nome=?,"
+                  + "  horaInicio=?,"
+                  + "  horaFim=?,"
+                  + "  diaSemana=?"
+                  + " WHERE id=?"
+            );
+            ps.setInt(1, disciplina.getIdUsuario());
+            ps.setInt(2, disciplina.getIdUniversidade());
+            ps.setInt(3, disciplina.getIdUnidade());
+            ps.setInt(4, disciplina.getIdCurso());
+            ps.setInt(5, disciplina.getIdTurma());
+            ps.setString(6, disciplina.getAbreviacao());
+            ps.setString(7, disciplina.getNome());
+            ps.setString(8, disciplina.getHoraInicio());
+            ps.setString(9, disciplina.getHoraFim());
+            ps.setInt(10, disciplina.getDiaSemana());
+            ps.setInt(11, disciplina.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -186,32 +236,37 @@ public class DisciplinaDAO {
         return disciplina;
     }
 
-    public boolean remove(int id) {
+    public DisciplinaModel remove(DisciplinaModel disciplina) {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("DELETE FROM disciplina WHERE codigo=?");
-            ps.setInt(1, id);
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Disciplina WHERE id=?");
+            ps.setInt(1, disciplina.getId());
             int count = ps.executeUpdate();
-            return count == 1;
+            disciplina.setRequestStatus(count == 1);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
+        return disciplina;
     }
 
     protected DisciplinaModel processRow(ResultSet rs) throws SQLException {
-        DisciplinaModel disciplina = new DisciplinaModel();
-        disciplina.setCodigo(rs.getInt("codigo"));
-        disciplina.setNome(rs.getString("nome"));
-        disciplina.setCodigoTurma(rs.getInt("codigoTurma"));
-        disciplina.setHorarioInicio(rs.getDate("dataInicioEvento"));
-        disciplina.setHorarioTermino(rs.getDate("dataFimEvento"));
-        disciplina.setDiaDaSemana(rs.getString("diaDaSemana"));
-        disciplina.setSala(rs.getString("sala"));
-        return disciplina;
+        return new DisciplinaModel()
+            .setId(rs.getInt("id"))
+            .setIdUsuario(rs.getInt("idUsuario"))
+            .setIdUniversidade(rs.getInt("idUniversidade"))
+            .setIdUnidade(rs.getInt("idUnidade"))
+            .setIdCurso(rs.getInt("idCurso"))
+            .setIdTurma(rs.getInt("idTurma"))
+            .setAbreviacao(rs.getString("abreviacao"))
+            .setNome(rs.getString("nome"))
+            .setHoraInicio(rs.getString("horaInicio"))
+            .setHoraFim(rs.getString("horaFim"))
+            .setDiaSemana(rs.getInt("diaSemana"))
+            .setRequestStatus(true);
     }
 
 }
