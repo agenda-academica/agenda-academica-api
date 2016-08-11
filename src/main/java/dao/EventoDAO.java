@@ -238,11 +238,15 @@ public class EventoDAO {
          evento.setTitulo(rs.getString("titulo"));
          evento.setDescricao(rs.getString("descricao"));
          evento.setCodigoUsuario(rs.getInt("codigoUsuario"));
+         
+         //TODO: ARRUMAR AQUI FDP
          evento.setCodigoTurma(rs.getInt("codigoUniversidade"));
          evento.setCodigoTurma(rs.getInt("codigoUnidade"));
          evento.setCodigoTurma(rs.getInt("codigoCurso"));
          evento.setCodigoTurma(rs.getInt("codigoTurma"));
          evento.setCodigoTurma(rs.getInt("codigoDisciplina"));
+         
+         //ATE AQUI
          //evento.setDataInicioEvento(rs.getDate("dataInicioEvento"));
         // evento.setDataFimEvento(rs.getDate("dataFimEvento"));
          evento.setDataInicioEvento(rs.getString("dataInicioEvento"));
