@@ -182,6 +182,7 @@ public class UsuarioDAO {
     public UsuarioModel login(UsuarioModel usuario) {
         Connection c = null;
         UsuarioModel usuarioModel = new UsuarioModel();
+        String sqlLogin = "SELECT * FROM Usuario WHERE login = ?";
         String sql = "SELECT * FROM Usuario where login = ? and senha = ?";
 
         try {
@@ -194,16 +195,22 @@ public class UsuarioDAO {
             if (rs.next()) {
                 usuarioModel = processRow(rs);
                 usuarioModel.setAuthenticated(true);
-                return usuarioModel;
             }
+            
+            PreparedStatement psLogin = c.prepareStatement(sqlLogin);
+            psLogin.setString(1, usuario.getLogin());
+            ResultSet rsLogin = psLogin.executeQuery();
+            if (rsLogin.next()) {
+                usuarioModel.setHasLogin(true);
+            }
+            return usuarioModel;
         } catch (SQLException e) {
             e.printStackTrace();
+            usuarioModel.setAuthenticated(false);
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
-        usuarioModel.setAuthenticated(false);
-        return usuarioModel;
     }
 
     protected UsuarioModel processRow(ResultSet rs) throws SQLException {
@@ -213,7 +220,6 @@ public class UsuarioDAO {
         usuario.setCelular(rs.getString("celular"));
         usuario.setEmail(rs.getString("email"));
         usuario.setLogin(rs.getString("login"));
-        //AQUI TEM QUE USAR CRIPTO GRAFIA
         usuario.setSenha(rs.getString("senha"));
         usuario.setAuthenticated(false);
         return usuario;

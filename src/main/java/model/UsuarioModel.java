@@ -15,6 +15,7 @@ public class UsuarioModel {
     private String senha;
     private String login;
     private boolean authenticated;
+    private boolean hasLogin;
 
     public UsuarioModel() {}
 
@@ -72,5 +73,13 @@ public class UsuarioModel {
 
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
+    }
+
+    public boolean getHasLogin() {
+        return hasLogin;
+    }
+
+    public void setHasLogin(boolean hasLogin) {
+        this.hasLogin = hasLogin;
     }
 }
