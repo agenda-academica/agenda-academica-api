@@ -108,5 +108,4 @@ public class UnidadeResources {
             MediaType.APPLICATION_JSON
         ).build();
     }
-
 }

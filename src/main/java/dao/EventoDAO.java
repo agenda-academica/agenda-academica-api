@@ -1,12 +1,10 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class EventoDAO {
     public List<EventoModel> findAll() {
         List<EventoModel> list = new ArrayList<EventoModel>();
         Connection c = null;
-        String sql = "SELECT * FROM evento ORDER BY nome";
+        String sql = "SELECT * FROM Evento ORDER BY id";
         try {
             c = ConnectionHelper.getConnection();
             Statement s = c.createStatement();
@@ -41,9 +39,9 @@ public class EventoDAO {
     public List<EventoModel> findByName(String nome) {
         List<EventoModel> list = new ArrayList<EventoModel>();
         Connection c = null;
-        String sql = "SELECT * FROM evento as e " +
-            "WHERE UPPER(nome) LIKE ? " +
-            "ORDER BY nome";
+        String sql = "SELECT * FROM Evento as e " +
+            "WHERE UPPER(titulo) LIKE ? " +
+            "ORDER BY titulo";
         try {
             c = ConnectionHelper.getConnection();
             PreparedStatement ps = c.prepareStatement(sql);
@@ -62,7 +60,7 @@ public class EventoDAO {
     }
 
     public EventoModel findById(int id) {
-        String sql = "SELECT * FROM evento WHERE codigo = ?";
+        String sql = "SELECT * FROM Evento WHERE id = ?";
         EventoModel evento = null;
         Connection c = null;
         try {
@@ -82,9 +80,32 @@ public class EventoDAO {
         return evento;
     }
 
+    public List<EventoModel> findByUsuarioId(int id) {
+        List<EventoModel> list = new ArrayList<EventoModel>();
+        String sql = "SELECT * FROM Evento WHERE idUsuario = ?";
+        Connection c = null;
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                EventoModel evento = processRow(rs);
+                evento.setRequestStatus(true);
+                list.add(evento);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionHelper.close(c);
+        }
+        return list;
+    }
+
     public List<EventoModel> findByFatherIdTurma(int id) {
         List<EventoModel> list = new ArrayList<EventoModel>();
-        String sql = "SELECT * FROM evento WHERE codigoTurma = ?";
+        String sql = "SELECT * FROM Evento WHERE idTurma = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -105,7 +126,7 @@ public class EventoDAO {
 
     public List<EventoModel> findByFatherIdCurso(int id) {
         List<EventoModel> list = new ArrayList<EventoModel>();
-        String sql = "SELECT * FROM evento WHERE codigoCurso = ?";
+        String sql = "SELECT * FROM Evento WHERE idCurso = ?";
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
@@ -127,7 +148,7 @@ public class EventoDAO {
 
     public EventoModel save(EventoModel evento)
     {
-        return evento.getCodigo() > 0 ? update(evento) : create(evento);
+        return evento.getId() > 0 ? update(evento) : create(evento);
     }
 
     public EventoModel create(EventoModel evento) {
@@ -135,43 +156,46 @@ public class EventoDAO {
         PreparedStatement ps = null;
         try {
             c = ConnectionHelper.getConnection();
-            ps = c.prepareStatement("INSERT INTO evento (titulo, descricao, codigoUsuario, codigoUniversidade, codigoUnidade, codigoTurma, codigoDisciplina, dataInicioEvento, dataFimEvento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            ps = c.prepareStatement(
+                "INSERT INTO Evento ("
+                + "idUsuario,"
+                + " idUniversidade,"
+                + " idUnidade,"
+                + " idCurso,"
+                + " idTurma,"
+                + " idDisciplina,"
+                + " tipo,"
+                + " titulo,"
+                + " descricao,"
+                + " dataInicio,"
+                + " dataFim,"
+                + " horaInicio,"
+                + " horaFim,"
+            + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             new String[] { "ID" });
 
-            ps.setString(1, evento.getTitulo());
-            ps.setString(2, evento.getDescricao());
-            ps.setInt(3, evento.getCodigoUsuario());
-            ps.setInt(4, evento.getCodigoInstituicaoDeEnsino());
-            ps.setInt(5, evento.getCodigoUnidade());
-            ps.setInt(6, evento.getCodigoTurma());
-            ps.setInt(7, evento.getCodigoDisciplina());
+            ps.setInt(1, evento.getIdUsuario());
+            ps.setInt(2, evento.getIdUniversidade());
+            ps.setInt(3, evento.getIdUnidade());
+            ps.setInt(4, evento.getIdCurso());
+            ps.setInt(5, evento.getIdTurma());
+            ps.setInt(6, evento.getIdDisciplina());
+            ps.setString(7, evento.getTipo());
+            ps.setString(8, evento.getTitulo());
+            ps.setString(9, evento.getDescricao());
+            ps.setString(10, evento.getDataInicio());
+            ps.setString(11, evento.getDataFim());
+            ps.setString(12, evento.getHoraInicio());
+            ps.setString(13, evento.getHoraFim());
+            ps.executeUpdate();
 
-            Date dataInicio = null;
-            Date dataFim = null;
-
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        try{
-            dataInicio = (Date) format.parse(evento.getDataInicioEvento());
-            dataFim =  (Date) format.parse(evento.getDataFimEvento());
-        }
-        catch(Exception ex) {}
-
-        //ps.setDate(8, (Date) evento.getDataInicioEvento());
-        //ps.setDate(9, (Date) evento.getDataFimEvento());
-        ps.setDate(8, dataInicio);
-        ps.setDate(9, dataFim);
-        // evento.setListaDeAulas(rs.getString("LISTAAAA"));
-        // evento.setRoteiroDaevento(rs.getString("LISTAAAA"));
-        ps.setInt(10, evento.getCodigo());
-        ps.executeUpdate();
-
-        ResultSet rs = ps.getGeneratedKeys();
-        rs.next();
-        // Update the id in the returned object. This is important as this value must be returned to the client.
-        int id = rs.getInt(1);
-        evento.setCodigo(id);
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            evento.setId(rs.getInt(1));
+            evento.setRequestStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
+            evento.setRequestStatus(false);
             throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
@@ -183,31 +207,43 @@ public class EventoDAO {
         Connection c = null;
         try {
             c = ConnectionHelper.getConnection();
-            PreparedStatement ps = c.prepareStatement("UPDATE evento SET titulo=?, descricao=?, codigoUsuario=?, codigoUniversidade=?, codigoUnidade=?, codigoTurma=?, codigoDisciplina=?, dataInicioEvento=?, dataFimEvento=? WHERE codigo=?");
-            ps.setString(1, evento.getTitulo());
-            ps.setString(2, evento.getDescricao());
-            ps.setInt(3, evento.getCodigoUsuario());
-            ps.setInt(4, evento.getCodigoInstituicaoDeEnsino());
-            ps.setInt(5, evento.getCodigoUnidade());
-            ps.setInt(6, evento.getCodigoTurma());
-            ps.setInt(7, evento.getCodigoDisciplina());
+            PreparedStatement ps = c.prepareStatement(
+                "UPDATE Evento SET"
+                    + " idUsuario=?,"
+                    + " idUniversidade=?,"
+                    + " idUnidade=?,"
+                    + " idCurso=?,"
+                    + " idTurma=?,"
+                    + " idDisciplina=?,"
+                    + " tipo=?,"
+                    + " titulo=?,"
+                    + " descricao=?,"
+                    + " dataInicio=?,"
+                    + " dataFim=?,"
+                    + " horaInicio=?,"
+                    + " horaFim=?,"
+                + " WHERE id=?"
+            );
 
-            try{
-//                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-//                Date dataInicio = (Date) format.parse(evento.getDataInicioEvento());
-//                Date dataFim = (Date) format.parse(evento.getDataFimEvento());
-            }
-            catch(Exception ex){
-
-            }
-            //ps.setDate(8, (Date) evento.getDataInicioEvento());
-            //ps.setDate(9, (Date) evento.getDataFimEvento());
-            // evento.setListaDeAulas(rs.getString("LISTAAAA"));
-            // evento.setRoteiroDaevento(rs.getString("LISTAAAA"));
-            ps.setInt(10, evento.getCodigo());
+            ps.setInt(1, evento.getIdUsuario());
+            ps.setInt(2, evento.getIdUniversidade());
+            ps.setInt(3, evento.getIdUnidade());
+            ps.setInt(4, evento.getIdCurso());
+            ps.setInt(5, evento.getIdTurma());
+            ps.setInt(6, evento.getIdDisciplina());
+            ps.setString(7, evento.getTipo());
+            ps.setString(8, evento.getTitulo());
+            ps.setString(9, evento.getDescricao());
+            ps.setString(10, evento.getDataInicio());
+            ps.setString(11, evento.getDataFim());
+            ps.setString(12, evento.getHoraInicio());
+            ps.setString(13, evento.getHoraFim());
+            ps.setInt(14, evento.getId());
             ps.executeUpdate();
+            evento.setRequestStatus(true);
         } catch (SQLException e) {
               e.printStackTrace();
+              evento.setRequestStatus(false);
               throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
@@ -215,44 +251,42 @@ public class EventoDAO {
         return evento;
     }
 
-    public boolean remove(int id) {
-          Connection c = null;
-          try {
-              c = ConnectionHelper.getConnection();
-              PreparedStatement ps = c.prepareStatement("DELETE FROM evento WHERE codigo=?");
-              ps.setInt(1, id);
-              int count = ps.executeUpdate();
-              return count == 1;
+    public EventoModel remove(int id) {
+        Connection c = null;
+        EventoModel evento = new EventoModel();
+        try {
+            c = ConnectionHelper.getConnection();
+            PreparedStatement ps = c.prepareStatement("DELETE FROM Evento WHERE id=?");
+            ps.setInt(1, id);
+            int count = ps.executeUpdate();
+            evento.setId(id);
+            evento.setRequestStatus(count == 1);
+            return evento;
           } catch (Exception e) {
-              e.printStackTrace();
-              throw new RuntimeException(e);
+              evento.setRequestStatus(false);
+            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             ConnectionHelper.close(c);
         }
     }
 
     protected EventoModel processRow(ResultSet rs) throws SQLException {
-        EventoModel evento = new EventoModel();
-
-         evento.setCodigo(rs.getInt("codigo"));
-         evento.setTitulo(rs.getString("titulo"));
-         evento.setDescricao(rs.getString("descricao"));
-         evento.setCodigoUsuario(rs.getInt("codigoUsuario"));
-         
-         //TODO: ARRUMAR AQUI FDP
-         evento.setCodigoTurma(rs.getInt("codigoUniversidade"));
-         evento.setCodigoTurma(rs.getInt("codigoUnidade"));
-         evento.setCodigoTurma(rs.getInt("codigoCurso"));
-         evento.setCodigoTurma(rs.getInt("codigoTurma"));
-         evento.setCodigoTurma(rs.getInt("codigoDisciplina"));
-         
-         //ATE AQUI
-         //evento.setDataInicioEvento(rs.getDate("dataInicioEvento"));
-        // evento.setDataFimEvento(rs.getDate("dataFimEvento"));
-         evento.setDataInicioEvento(rs.getString("dataInicioEvento"));
-         evento.setDataFimEvento(rs.getString("dataFimEvento"));
-
-        return evento;
+        return new EventoModel()
+            .setId(rs.getInt("id"))
+            .setIdUsuario(rs.getInt("idUsuario"))
+            .setIdUniversidade(rs.getInt("idUniversidade"))
+            .setIdUnidade(rs.getInt("idUnidade"))
+            .setIdCurso(rs.getInt("idCurso"))
+            .setIdTurma(rs.getInt("idTurma"))
+            .setIdDisciplina(rs.getInt("idDisciplina"))
+            .setTipo(rs.getString("tipo"))
+            .setTitulo(rs.getString("titulo"))
+            .setDescricao(rs.getString("descricao"))
+            .setDataInicio(rs.getString("dataInicio"))
+            .setDataFim(rs.getString("dataFim"))
+            .setHoraInicio(rs.getString("horaInicio"))
+            .setHoraFim(rs.getString("horaFim"));
     }
 
 }

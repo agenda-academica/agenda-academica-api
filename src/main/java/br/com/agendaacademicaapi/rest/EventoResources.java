@@ -11,61 +11,100 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import com.google.gson.Gson;
 
 import dao.EventoDAO;
 import model.EventoModel;
+import model.RequestStatusModel;
 
 @Path("/evento")
 public class EventoResources {
 
     EventoDAO dao = new EventoDAO();
+    Gson gson = new Gson();
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<EventoModel> findAll() {
-        return dao.findAll();
+    public Response findAll() {
+        List<EventoModel> list = dao.findAll();
+        if (list.size() < 1) {
+            return this.getRequestStatusOk();
+        }
+
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("search/{query}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<EventoModel> findByName(@PathParam("query") String query) {
-        return dao.findByName(query);
+    public Response findByName(@PathParam("query") String query) {
+        return Response.ok(
+            gson.toJson(dao.findByName(query)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @GET @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public EventoModel findById(@PathParam("id") String codigo) {
-        return dao.findById(Integer.parseInt(codigo));
+    public Response findById(@PathParam("id") String id) {
+        return Response.ok(
+            gson.toJson(dao.findById(Integer.parseInt(id))),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
-    /*
-    @GET @Path("findByChildrenId/{query}")
+    @GET @Path("usuario/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<AnexoModel_TALVEZ_NAO_SERA_USADA> findByChildrenId(@PathParam("query") int query) {
-        AnexoDAO_TALVEZ_NAO_SERA_USADO anexoDAO = new AnexoDAO_TALVEZ_NAO_SERA_USADO();
-        return anexoDAO.findByFatherIdevento(query);
+    public Response findByUsuarioId(@PathParam("id") String idUsuario) {
+        List<EventoModel> list = dao.findByUsuarioId(Integer.parseInt(idUsuario));
+        if (list.size() < 1) {
+            return this.getRequestStatusOk();
+        }
+
+        return Response.ok(
+            gson.toJson(list),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
-    */
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public EventoModel create(EventoModel evento) {
-        return dao.create(evento);
+    public Response create(EventoModel unidade) {
+        return Response.ok(
+            gson.toJson(dao.create(unidade)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @PUT @Path("{id}")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public EventoModel update(EventoModel evento) {
-        dao.update(evento);
-        return evento;
+    public Response update(EventoModel unidade, @PathParam("id") String id) {
+        unidade.setId(Integer.parseInt(id));
+        return Response.ok(
+            gson.toJson(dao.update(unidade)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
     @DELETE @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void remove(@PathParam("id") int id) {
-        dao.remove(id);
+    public Response remove(@PathParam("id") int id) {
+        return Response.ok(
+            gson.toJson(dao.remove(id)),
+            MediaType.APPLICATION_JSON
+        ).build();
     }
 
+    private Response getRequestStatusOk() {
+        return Response.ok(
+            gson.toJson(new RequestStatusModel(true)),
+            MediaType.APPLICATION_JSON
+        ).build();
+    }
 }

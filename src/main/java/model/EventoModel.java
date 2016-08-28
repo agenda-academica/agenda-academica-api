@@ -7,136 +7,230 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class EventoModel {
-    private int codigo;
+    private int id;
+    private int idUsuario;
+    private int idUniversidade;
+    private int idUnidade;
+    private int idCurso;
+    private int idTurma;
+    private int idDisciplina;
+    private String tipo;
     private String titulo;
-    private int codigoDisciplina;
-    private int codigoTurma;
-    private int codigoCurso;
-    private int codigoUnidade;
-    private int codigoInstituicaoDeEnsino;
-    private int codigoUsuario;
-    // private Date dataInicioEvento;
-    // private Date dataFimEvento;
-    private String dataInicioEvento;
-    private String dataFimEvento;
     private String descricao;
-    //em minutos, para alertar antes do evento
-    private int lembrete;
+    private String dataInicio;
+    private String dataFim;
+    private String horaInicio;
+    private String horaFim;
+    private boolean requestStatus;
 
-    public int getCodigo() {
-        return codigo;
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    /**
+     * @param id the id to set
+     */
+    public EventoModel setId(int id) {
+        this.id = id;
+        return this;
     }
-
+    /**
+     * @return the idUsuario
+     */
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+    /**
+     * @param idUsuario the idUsuario to set
+     */
+    public EventoModel setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+        return this;
+    }
+    /**
+     * @return the idUniversidade
+     */
+    public int getIdUniversidade() {
+        return idUniversidade;
+    }
+    /**
+     * @param idUniversidade the idUniversidade to set
+     */
+    public EventoModel setIdUniversidade(int idUniversidade) {
+        this.idUniversidade = idUniversidade;
+        return this;
+    }
+    /**
+     * @return the idUnidade
+     */
+    public int getIdUnidade() {
+        return idUnidade;
+    }
+    /**
+     * @param idUnidade the idUnidade to set
+     */
+    public EventoModel setIdUnidade(int idUnidade) {
+        this.idUnidade = idUnidade;
+        return this;
+    }
+    /**
+     * @return the idCurso
+     */
+    public int getIdCurso() {
+        return idCurso;
+    }
+    /**
+     * @param idCurso the idCurso to set
+     */
+    public EventoModel setIdCurso(int idCurso) {
+        this.idCurso = idCurso;
+        return this;
+    }
+    /**
+     * @return the idTurma
+     */
+    public int getIdTurma() {
+        return idTurma;
+    }
+    /**
+     * @param idTurma the idTurma to set
+     */
+    public EventoModel setIdTurma(int idTurma) {
+        this.idTurma = idTurma;
+        return this;
+    }
+    /**
+     * @return the idDisciplina
+     */
+    public int getIdDisciplina() {
+        return idDisciplina;
+    }
+    /**
+     * @param idDisciplina the idDisciplina to set
+     */
+    public EventoModel setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+        return this;
+    }
+    /**
+     * @return the tipo
+     */
+    public String getTipo() {
+        return tipo;
+    }
+    /**
+     * @param tipo the tipo to set
+     */
+    public EventoModel setTipo(String tipo) {
+        this.tipo = tipo;
+        return this;
+    }
+    /**
+     * @return the titulo
+     */
     public String getTitulo() {
         return titulo;
     }
-
-    public void setTitulo(String titulo) {
+    /**
+     * @param titulo the titulo to set
+     */
+    public EventoModel setTitulo(String titulo) {
         this.titulo = titulo;
+        return this;
     }
-
-    public int getCodigoDisciplina() {
-        return codigoDisciplina;
-    }
-
-    public void setCodigoDisciplina(int codigoDisciplina) {
-        this.codigoDisciplina = codigoDisciplina;
-    }
-
-    public int getCodigoTurma() {
-        return codigoTurma;
-    }
-
-    public void setCodigoTurma(int codigoTurma) {
-        this.codigoTurma = codigoTurma;
-    }
-
-    public int getCodigoCurso() {
-        return codigoCurso;
-    }
-
-    public void setCodigoCurso(int codigoCurso) {
-        this.codigoCurso = codigoCurso;
-    }
-
-    public int getCodigoUnidade() {
-        return codigoUnidade;
-    }
-
-    public void setCodigoUnidade(int codigoUnidade) {
-        this.codigoUnidade = codigoUnidade;
-    }
-
-    public int getCodigoInstituicaoDeEnsino() {
-        return codigoInstituicaoDeEnsino;
-    }
-
-    public void setCodigoInstituicaoDeEnsino(int codigoInstituicaoDeEnsino) {
-        this.codigoInstituicaoDeEnsino = codigoInstituicaoDeEnsino;
-    }
-
-    public int getCodigoUsuario() {
-        return codigoUsuario;
-    }
-
-    public void setCodigoUsuario(int codigoUsuario) {
-        this.codigoUsuario = codigoUsuario;
-    }
-
-    /*
-    public Date getDataInicioEvento() {
-        return dataInicioEvento;
-    }
-
-    public void setDataInicioEvento(Date dataInicioEvento) {
-        this.dataInicioEvento = dataInicioEvento;
-    }
-
-    public Date getDataFimEvento() {
-        return dataFimEvento;
-    }
-
-    public void setDataFimEvento(Date dataFimEvento) {
-        this.dataFimEvento = dataFimEvento;
-    }
-    */
-
+    /**
+     * @return the descricao
+     */
     public String getDescricao() {
         return descricao;
     }
-
-    public void setDescricao(String descricao) {
+    /**
+     * @param descricao the descricao to set
+     */
+    public EventoModel setDescricao(String descricao) {
         this.descricao = descricao;
+        return this;
     }
-
-    public int getLembrete() {
-        return lembrete;
+    /**
+     * @return the dataInicio
+     */
+    public String getDataInicio() {
+        return dataInicio;
     }
-
-    public void setLembrete(int lembrete) {
-        this.lembrete = lembrete;
+    /**
+     * @param dataInicio the dataInicio to set
+     */
+    public EventoModel setDataInicio(String dataInicio) {
+        this.dataInicio = dataInicio;
+        return this;
     }
-
-    public String getDataInicioEvento() {
-        return dataInicioEvento;
+    /**
+     * @return the dataFim
+     */
+    public String getDataFim() {
+        return dataFim;
     }
-
-    public void setDataInicioEvento(String dataInicioEvento) {
-        this.dataInicioEvento = dataInicioEvento;
+    /**
+     * @param dataFim the dataFim to set
+     */
+    public EventoModel setDataFim(String dataFim) {
+        this.dataFim = dataFim;
+        return this;
     }
-
-    public String getDataFimEvento() {
-        return dataFimEvento;
+    /**
+     * @return the horaInicio
+     */
+    public String getHoraInicio() {
+        return horaInicio;
     }
-
-    public void setDataFimEvento(String dataFimEvento) {
-        this.dataFimEvento = dataFimEvento;
+    /**
+     * @param horaInicio the horaInicio to set
+     */
+    public EventoModel setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+        return this;
     }
-
-    //talvez n�o vai existir
-    //private ArrayList<AnexoModel> listaDeAnexos = new ArrayList<AnexoModel>();
+    /**
+     * @return the horaFim
+     */
+    public String getHoraFim() {
+        return horaFim;
+    }
+    /**
+     * @param horaFim the horaFim to set
+     */
+    public EventoModel setHoraFim(String horaFim) {
+        this.horaFim = horaFim;
+        return this;
+    }
+    /**
+     * @return the requestStatus
+     */
+    public boolean getRequestStatus() {
+        return requestStatus;
+    }
+    /**
+     * @param requestStatus the requestStatus to set
+     */
+    public EventoModel setRequestStatus(boolean requestStatus) {
+        this.requestStatus = requestStatus;
+        return this;
+    }
+    
+    @Override
+    public String toString() {
+        return "EventoModel [id=" + id + ", idUsuario=" + idUsuario + ", idUniversidade=" + idUniversidade
+                + ", idUnidade=" + idUnidade + ", idCurso=" + idCurso + ", idTurma=" + idTurma + ", idDisciplina="
+                + idDisciplina + ", tipo=" + tipo + ", titulo=" + titulo + ", descricao=" + descricao + ", dataInicio="
+                + dataInicio + ", dataFim=" + dataFim + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim
+                + ", getId()=" + getId() + ", getIdUsuario()=" + getIdUsuario() + ", getIdUniversidade()="
+                + getIdUniversidade() + ", getIdUnidade()=" + getIdUnidade() + ", getIdCurso()=" + getIdCurso()
+                + ", getIdTurma()=" + getIdTurma() + ", getIdDisciplina()=" + getIdDisciplina() + ", getTipo()="
+                + getTipo() + ", getTitulo()=" + getTitulo() + ", getDescricao()=" + getDescricao()
+                + ", getDataInicio()=" + getDataInicio() + ", getDataFim()=" + getDataFim() + ", getHoraInicio()="
+                + getHoraInicio() + ", getHoraFim()=" + getHoraFim() + ", getClass()=" + getClass() + ", hashCode()="
+                + hashCode() + ", toString()=" + super.toString() + "]";
+    }
 }

@@ -53,18 +53,21 @@ CREATE TABLE IF NOT EXISTS IF NOT EXISTS `Disciplina` (
 
 DROP TABLE IF EXISTS `Evento`;
 CREATE TABLE IF NOT EXISTS `Evento` (
-  `codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `codigoUsuario` int(11) NOT NULL,
-  `codigoDisciplina` int(11) DEFAULT NULL,
-  `codigoTurma` int(11) DEFAULT NULL,
-  `codigoCurso` int(11) DEFAULT NULL,
-  `codigoUnidade` int(11) DEFAULT NULL,
-  `codigoUniversidade` int(11) NOT NULL,
-  `titulo` varchar(45) DEFAULT NULL,
-  `descricao` text,
-  `dataInicioEvento` datetime DEFAULT NULL,
-  `dataFimEvento` datetime DEFAULT NULL,
-  PRIMARY KEY (`codigo`)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL,
+  `idUniversidade` INT NOT NULL,
+  `idUnidade` INT NOT NULL,
+  `idCurso` INT NOT NULL,
+  `idTurma` INT NOT NULL,
+  `idDisciplina` INT NOT NULL,
+  `tipo` ENUM('Prova', 'Trabalho', 'Outros') NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` TEXT NULL,
+  `dataInicio` DATE NOT NULL,
+  `dataFim` DATE NOT NULL,
+  `horaInicio` TIME NOT NULL,
+  `horaFim` TIME NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `Universidade`;
